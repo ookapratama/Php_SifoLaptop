@@ -1,5 +1,5 @@
 <?php
-
+include 'controllers/admin/function.php';
 include 'header.php';
 ?>
 
@@ -69,14 +69,14 @@ include 'header.php';
                               <!--begin::Menu item-->
                               <div class="menu-item">
                                  <!--begin::Menu link-->
-                                 <a class="menu-link nav-link active py-3 px-4 px-xxl-6" href="#kt_body" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Home</a>
+                                 <a class="menu-link nav-link active py-3 px-4 px-xxl-6" href="index.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Home</a>
                                  <!--end::Menu link-->
                               </div>
                               <!--end::Menu item-->
                               <!--begin::Menu item-->
                               <div class="menu-item">
                                  <!--begin::Menu link-->
-                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="#how-it-works" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Cara Kerja</a>
+                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="index.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Cara Kerja</a>
                                  <!--end::Menu link-->
                               </div>
                               <!--end::Menu item-->
@@ -104,29 +104,7 @@ include 'header.php';
                <!--end::Container-->
             </div>
             <!--end::Header-->
-            <!--begin::Landing hero-->
-            <div class="d-flex flex-column flex-center w-100 min-h-350px min-h-lg-500px px-9">
-               <!--begin::Heading-->
-               <div class="text-center mb-5 mb-lg-10 py-10 py-lg-20">
-                  <!--begin::Title-->
-                  <h1 class="text-white lh-base fw-bold fs-2x fs-lg-3x mb-15">Find your Laptop
-                     <br />and
-                     <span style="background: linear-gradient(to right, #12CE5D 0%, #FFD80C 100%);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
-                        <span id="kt_landing_hero_text">We Will Help You</span>
-                     </span>
-                  </h1>
-                  <!--end::Title-->
-                  <!--begin::Action-->
-                  <!-- <a href="../../demo1/dist/index.html" class="btn btn-primary">Try Metronic</a> -->
-                  <div class="input-group mb-3">
-                     <input type="text" class="form-control" placeholder="Cari Laptop " aria-label="Recipient's username" aria-describedby="button-addon2">
-                     <button class="btn btn-primary" type="button" id="button-addon2">Cari</button>
-                  </div>
-                  <!--end::Action-->
-               </div>
-               <!--end::Heading-->
-            </div>
-            <!--end::Landing hero-->
+
          </div>
          <!--end::Wrapper-->
          <!--begin::Curve bottom-->
@@ -138,93 +116,7 @@ include 'header.php';
          <!--end::Curve bottom-->
       </div>
       <!--end::Header Section-->
-      <!--begin::How It Works Section-->
-      <div class="mb-n10 mb-lg-n20 z-index-2">
-         <!--begin::Container-->
-         <div class="container">
-            <!--begin::Heading-->
-            <div class="text-center mb-17">
-               <!--begin::Title-->
-               <h3 class="fs-2hx text-dark mb-5" id="how-it-works" data-kt-scroll-offset="{default: 100, lg: 150}">Cara Kerja nya</h3>
-               <!--end::Title-->
 
-            </div>
-            <!--end::Heading-->
-            <!--begin::Row-->
-            <div class="row w-100 gy-10 mb-md-20">
-               <!--begin::Col-->
-               <div class="col-md-4 px-5">
-                  <!--begin::Story-->
-                  <div class="text-center mb-10 mb-md-0">
-                     <!--begin::Illustration-->
-                     <img src="assets/media/illustrations/sketchy-1/2.png" class="mh-125px mb-9" alt="" />
-                     <!--end::Illustration-->
-                     <!--begin::Heading-->
-                     <div class="d-flex flex-center mb-5">
-                        <!--begin::Badge-->
-                        <span class="badge badge-circle badge-light-success fw-bold p-5 me-3 fs-3">1</span>
-                        <!--end::Badge-->
-                        <!--begin::Title-->
-                        <div class="fs-5 fs-lg-3 fw-bold text-dark">Klik Search</div>
-                        <!--end::Title-->
-                     </div>
-                     <!--end::Heading-->
-
-                  </div>
-                  <!--end::Story-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-md-4 px-5">
-                  <!--begin::Story-->
-                  <div class="text-center mb-10 mb-md-0">
-                     <!--begin::Illustration-->
-                     <img src="assets/media/illustrations/sketchy-1/8.png" class="mh-125px mb-9" alt="" />
-                     <!--end::Illustration-->
-                     <!--begin::Heading-->
-                     <div class="d-flex flex-center mb-5">
-                        <!--begin::Badge-->
-                        <span class="badge badge-circle badge-light-success fw-bold p-5 me-3 fs-3">2</span>
-                        <!--end::Badge-->
-                        <!--begin::Title-->
-                        <div class="fs-5 fs-lg-3 fw-bold text-dark">Masukkan kebutuhan anda</div>
-                        <!--end::Title-->
-                     </div>
-                     <!--end::Heading-->
-
-                  </div>
-                  <!--end::Story-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-md-4 px-5">
-                  <!--begin::Story-->
-                  <div class="text-center mb-10 mb-md-0">
-                     <!--begin::Illustration-->
-                     <img src="assets/media/illustrations/sketchy-1/12.png" class="mh-125px mb-9" alt="" />
-                     <!--end::Illustration-->
-                     <!--begin::Heading-->
-                     <div class="d-flex flex-center mb-5">
-                        <!--begin::Badge-->
-                        <span class="badge badge-circle badge-light-success fw-bold p-5 me-3 fs-3">3</span>
-                        <!--end::Badge-->
-                        <!--begin::Title-->
-                        <div class="fs-5 fs-lg-3 fw-bold text-dark">Cari dan silahkan pilih</div>
-                        <!--end::Title-->
-                     </div>
-                     <!--end::Heading-->
-
-                  </div>
-                  <!--end::Story-->
-               </div>
-               <!--end::Col-->
-            </div>
-            <!--end::Row-->
-
-         </div>
-         <!--end::Container-->
-      </div>
-      <!--end::How It Works Section-->
 
       <!--begin::Testimonials Section-->
       <div class="mt-20 mb-n10 position-relative z-index-2">
@@ -233,7 +125,7 @@ include 'header.php';
             <!--begin::Heading-->
             <div class="text-center mb-17">
                <!--begin::Title-->
-               <h3 class="fs-2hx text-dark mb-5" id="produk" data-kt-scroll-offset="{default: 125, lg: 150}">Produk Terbaik</h3>
+               <h3 class="fs-2hx text-dark mb-5" id="produk" data-kt-scroll-offset="{default: 125, lg: 150}">Produk</h3>
                <!--end::Title-->
                <!--begin::Description-->
                <div class="fs-5 text-muted fw-bold">Save thousands to millions of bucks by using single tool
@@ -244,141 +136,71 @@ include 'header.php';
             <!--end::Heading-->
             <!--begin::Row-->
             <div class="row g-lg-10 mb-10 mb-lg-20">
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
 
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
+               <?php
+               $produks = select("SELECT laptop.*, 
+					ram_feature.nama_fitur AS ram,
+               prosesor_feature.nama_fitur AS prosesor,
+               storage_feature.nama_fitur AS storage,
+               vga_feature.nama_fitur AS vga,
+					screen_feature.nama_fitur AS screen,
+					kategori_laptop.nama_kategori
+					FROM laptop
+					JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
+					JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
+					JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
+					JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+					JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
+					LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
+               while ($produk = mysqli_fetch_assoc($produks)) :
+               ?>
+                  <!--begin::Col-->
+                  <div class="col-lg-4">
+                     <!--begin::Testimonial-->
+                     <!--begin::Modal - New Card-->
+                     <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                           <!--begin::Modal content-->
+                           <div class="modal-content">
+                              <!--begin::Modal header-->
+                              <div class="modal-header m-3 py-5 px-3">
+                                 <!--begin::Modal title-->
+                                 <h2><?= $produk['merk_laptop'] ?> - <?= $produk['model_laptop'] ?> <br> <?= $produk['nama_kategori'] ?></h2>
+                                 <!--end::Modal title-->
 
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
                               </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
+                              <!--end::Modal header-->
+                              <!--begin::Modal body-->
+                              <div class="modal-body scroll-y mx-5 my-3    ">
+
+                                 <img src="admin/img/<?= $produk['gambar_laptop'] ?>" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
+                                 <div class="text-left my-3">
+                                    <span class="text-muted d-block">Processor : <?= $produk['prosesor'] ?></span>
+                                    <span class="text-muted d-block">Ram : <?= $produk['ram'] ?> </span>
+                                    <span class="text-muted d-block">Storage : <?= $produk['storage'] ?></span>
+                                    <span class="text-muted d-block">VGA Card : <?= $produk['vga'] ?></span>
+                                    <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
+                                 </div>
+                                 <div class="text-center">
+                                    <h3><?= $produk['harga_laptop'] ?></h3>
+                                 </div>
+                              </div>
+                              <!--end::Modal body-->
+                              <div class="d-grid gap-2">
+                                 <button class="btn btn-primary" type="button" >More Info</button>
                               </div>
                            </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
+                           <!--end::Modal content-->
                         </div>
-                        <!--end::Modal content-->
+                        <!--end::Modal dialog-->
                      </div>
-                     <!--end::Modal dialog-->
+                     <!--end::Modal - New Card-->
+                     <!--end::Testimonial-->
                   </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
+                  <!--end::Col-->
+               <?php endwhile; ?>
 
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
-
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
-                              </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
-                              </div>
-                           </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
-                        </div>
-                        <!--end::Modal content-->
-                     </div>
-                     <!--end::Modal dialog-->
-                  </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
-
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
-
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
-                              </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
-                              </div>
-                           </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
-                        </div>
-                        <!--end::Modal content-->
-                     </div>
-                     <!--end::Modal dialog-->
-                  </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
 
 
             </div>

@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\xampp\htdocs\sifo-laptop\config.php';
+include 'C:\Apache24\htdocs\sifo-laptop\config.php';
 
 
 function select($query)

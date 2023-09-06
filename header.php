@@ -21,6 +21,12 @@
    <!--begin::Global Stylesheets Bundle(used by all pages)-->
    <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+   
+   <link href="assets/sass/components/_utilities.scss" rel="stylesheet" type="text/css" />
+   <link href="assets/sass/components/_variables.scss" rel="stylesheet" type="text/css" />
+   <link href="assets/sass/components/_variables.custom.scss" rel="stylesheet" type="text/css" />
+   <link href="assets/sass/components/_card.scss" rel="stylesheet" type="text/css" />
+   <link href="assets/sass/components/components.scss" rel="stylesheet" type="text/css" />
    <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
