@@ -1,5 +1,5 @@
 <?php
-
+include 'controllers/admin/function.php';
 include 'header.php';
 ?>
 
@@ -244,142 +244,71 @@ include 'header.php';
             <!--end::Heading-->
             <!--begin::Row-->
             <div class="row g-lg-10 mb-10 mb-lg-20">
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
 
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
+               <?php
+               $produks = select("SELECT laptop.*, 
+					ram_feature.nama_fitur AS ram,
+               prosesor_feature.nama_fitur AS prosesor,
+               storage_feature.nama_fitur AS storage,
+               vga_feature.nama_fitur AS vga,
+					screen_feature.nama_fitur AS screen,
+					kategori_laptop.nama_kategori
+					FROM laptop
+					JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
+					JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
+					JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
+					JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+					JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
+					LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori 
+               ORDER BY id_laptop DESC LIMIT 3");
+               while ($produk = mysqli_fetch_assoc($produks)) :
+               ?>
+                  <!--begin::Col-->
+                  <div class="col-lg-4">
+                     <!--begin::Testimonial-->
+                     <!--begin::Modal - New Card-->
+                     <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
+                        <!--begin::Modal dialog-->
+                        <div class="modal-dialog modal-dialog-centered mw-650px">
+                           <!--begin::Modal content-->
+                           <div class="modal-content">
+                              <!--begin::Modal header-->
+                              <div class="modal-header m-3 py-5 px-3">
+                                 <!--begin::Modal title-->
+                                 <h2><?= $produk['merk_laptop'] ?> - <?= $produk['model_laptop'] ?> <br> <?= $produk['nama_kategori'] ?></h2>
+                                 <!--end::Modal title-->
 
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
                               </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
+                              <!--end::Modal header-->
+                              <!--begin::Modal body-->
+                              <div class="modal-body scroll-y mx-5 my-3    ">
+
+                                 <img src="admin/img/<?= $produk['gambar_laptop'] ?>" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
+                                 <div class="text-left my-3">
+                                    <span class="text-muted d-block">Processor : <?= $produk['prosesor'] ?></span>
+                                    <span class="text-muted d-block">Ram : <?= $produk['ram'] ?> </span>
+                                    <span class="text-muted d-block">Storage : <?= $produk['storage'] ?></span>
+                                    <span class="text-muted d-block">VGA Card : <?= $produk['vga'] ?></span>
+                                    <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
+                                 </div>
+                                 <div class="text-center">
+                                    <h3><?= $produk['harga_laptop'] ?></h3>
+                                 </div>
+                              </div>
+                              <!--end::Modal body-->
+                              <div class="d-grid gap-2">
+                                 <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
                               </div>
                            </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
+                           <!--end::Modal content-->
                         </div>
-                        <!--end::Modal content-->
+                        <!--end::Modal dialog-->
                      </div>
-                     <!--end::Modal dialog-->
+                     <!--end::Modal - New Card-->
+                     <!--end::Testimonial-->
                   </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
-
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
-
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
-                              </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
-                              </div>
-                           </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
-                        </div>
-                        <!--end::Modal content-->
-                     </div>
-                     <!--end::Modal dialog-->
-                  </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
-               <!--begin::Col-->
-               <div class="col-lg-4">
-                  <!--begin::Testimonial-->
-                  <!--begin::Modal - New Card-->
-                  <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                     <!--begin::Modal dialog-->
-                     <div class="modal-dialog modal-dialog-centered mw-650px">
-                        <!--begin::Modal content-->
-                        <div class="modal-content">
-                           <!--begin::Modal header-->
-                           <div class="modal-header m-3 py-5 px-3">
-                              <!--begin::Modal title-->
-                              <h2>Merk Laptop - Model Laptop</h2>
-                              <!--end::Modal title-->
-
-                           </div>
-                           <!--end::Modal header-->
-                           <!--begin::Modal body-->
-                           <div class="modal-body scroll-y mx-5 my-3    ">
-
-                              <img src="assets/img/galeri1.png" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                              <div class="text-left my-3">
-                                 <span class="text-muted d-block">Processor : </span>
-                                 <span class="text-muted d-block">Ram : </span>
-                                 <span class="text-muted d-block">Storage :</span>
-                                 <span class="text-muted d-block">VGA Card : </span>
-                                 <span class="text-muted d-block">Size Screen : </span>
-                              </div>
-                              <div class="text-center">
-                                 <h3>Rp. 2.000.000</h3>
-                              </div>
-                           </div>
-                           <!--end::Modal body-->
-                           <div class="d-grid gap-2">
-                              <button class="btn btn-primary" type="button">More Info</button>
-                           </div>
-                        </div>
-                        <!--end::Modal content-->
-                     </div>
-                     <!--end::Modal dialog-->
-                  </div>
-                  <!--end::Modal - New Card-->
-                  <!--end::Testimonial-->
-               </div>
-               <!--end::Col-->
-
+                  <!--end::Col-->
+               <?php endwhile; ?>
 
             </div>
             <!--end::Row-->
@@ -1257,6 +1186,101 @@ include 'header.php';
       <!--end::Svg Icon-->
    </div>
    <!--end::Scrolltop-->
+
+   <!-- Modal per Produk -->
+   <div class="modal fade" id="kt_modal_new_card" tabindex="-1" aria-hidden="true">
+      <!--begin::Modal dialog-->
+      <div class="modal-dialog modal-dialog-centered mw-650px">
+         <!--begin::Modal content-->
+         <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+               <!--begin::Modal title-->
+               <div class="d-block">
+
+                  <h1 id="merk_laptop"></h1>
+                  <h2 id="nama_kategori"></h2>
+               </div>
+
+               <!-- <h2>Add New Card <span id="id_laptop"></span></h2> -->
+               <!--end::Modal title-->
+               <!--begin::Close-->
+               <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                  <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                  <span class="svg-icon svg-icon-1">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                     </svg>
+                  </span>
+                  <!--end::Svg Icon-->
+               </div>
+               <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+               <!--  -->
+               <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                     <div class="carousel-item active ">
+                        <img src="" class="d-block w-50 mx-auto modal-image" alt="">
+                     </div>
+                     <!-- <div class="carousel-item">
+                        <img src="..." class="d-block w-100" alt="...">
+                     </div>
+                     <div class="carousel-item">
+                        <img src="..." class="d-block w-100" alt="...">
+                     </div> -->
+                  </div>
+                  <div class="row mt-5 text-center">
+                     <div class="col-md-6">
+                        <h4 id="prosesor"></h4>
+                     </div>
+                     <div class="col-md-6">
+                        <h4 id="ram"></h4>
+                     </div>
+                  </div>
+                  <div class="row text-center my-3">
+                     <div class="col-md-6">
+                        <h4 id="vga"></h4>
+                     </div>
+                     <div class="col-md-6">
+                        <h4 id="screen"></h4>
+                     </div>
+                  </div>
+                  <h3 class="my-5 text-center" id="harga_laptop"></h3>
+                  <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                     <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                     <span class="visually-hidden">Next</span>
+                  </button> -->
+               </div>
+            </div>
+            <!--end::Modal body-->
+         </div>
+         <!--end::Modal content-->
+      </div>
+      <!--end::Modal dialog-->
+   </div>
+
+   <script>
+      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, vga, screen, harga_laptop) {
+         console.log(gambar_laptop);
+         document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
+         document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
+         document.querySelector('#prosesor').innerHTML = "Processor : " + prosesor;
+         document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
+         document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
+         document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
+         document.querySelector('#harga_laptop').innerHTML = "Harga : " + harga_laptop;
+         const gambar_laptop1 = document.querySelector('.modal-image');
+         gambar_laptop1.src = 'admin/img/' + gambar_laptop;
+      }
+   </script>
 
    <?php
    include 'footer.php';
