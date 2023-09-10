@@ -57,9 +57,9 @@ include 'header.php';
                         </button>
                         <!--end::Mobile menu toggle-->
                         <!--begin::Logo image-->
-                        <a href="../../demo1/dist/landing.html">
-                           <img alt="Logo" src="assets/media/logos/landing.svg" class="logo-default h-25px h-lg-30px" />
-                           <img alt="Logo" src="assets/media/logos/landing-dark.svg" class="logo-sticky h-20px h-lg-25px" />
+                        <a href="#">
+                           <img alt="Logo" src="assets/img/brand.png" class="logo-default h-25px h-lg-30px" />
+                           <img alt="Logo" src="assets/img/brand.png" class="logo-sticky h-20px h-lg-25px" />
                         </a>
                         <!--end::Logo image-->
                      </div>
@@ -176,7 +176,7 @@ include 'header.php';
                      vga_feature.nama_fitur LIKE '%" . $vga . "%'AND
                      screen_feature.nama_fitur LIKE '%" . $screen . "%'
                       ");
-                     // var_dump($produks);
+                  // var_dump($produks);
                } else {
 
                   $produks = select("SELECT laptop.*, 
@@ -378,12 +378,12 @@ include 'header.php';
                   <!--begin::Copyright-->
                   <div class="d-flex align-items-center order-2 order-md-1">
                      <!--begin::Logo-->
-                     <a href="../../demo1/dist/landing.html">
-                        <img alt="Logo" src="assets/media/logos/landing.svg" class="h-15px h-md-20px" />
+                     <a href="#">
+                        <img alt="Logo" src="assets/img/brand.png" class="h-15px h-md-20px" />
                      </a>
                      <!--end::Logo image-->
                      <!--begin::Logo image-->
-                     <span class="mx-5 fs-6 fw-semibold text-gray-600 pt-1" href="https://keenthemes.com">&copy; 2022 Keenthemes Inc.</span>
+                     <span class="mx-5 fs-6 fw-semibold text-gray-600 pt-1" href="#">&copy; 2023 HnD Computer.</span>
                      <!--end::Logo image-->
                   </div>
                   <!--end::Copyright-->
@@ -1162,41 +1162,70 @@ include 'header.php';
                      <div class="carousel-item active ">
                         <img src="" class="d-block w-50 mx-auto modal-image" alt="">
                      </div>
-                     <!-- <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                     </div>
-                     <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                     </div> -->
+
                   </div>
-                  <div class="row mt-5 text-center">
-                     <div class="col-md-6">
-                        <h4 id="prosesor"></h4>
-                     </div>
-                     <div class="col-md-6">
-                        <h4 id="ram"></h4>
-                     </div>
-                  </div>
-                  <div class="row text-center my-3">
-                     <div class="col-md-6">
-                        <h4 id="vga"></h4>
-                     </div>
-                     <div class="col-md-6">
-                        <h4 id="screen"></h4>
-                     </div>
-                  </div>
-                  <h3 class="my-5 text-center" id="harga_laptop"></h3>
-                  <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Previous</span>
-                  </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Next</span>
-                  </button> -->
+
+
                </div>
+
+
+
+
+               <div class="row mt-5 text-center">
+                  <div class="col-md-6">
+                     <!-- <h4 id="prosesor"></h4> -->
+                  </div>
+                  <div class="col-md-6">
+                     <!-- <h4 id="ram"></h4> -->
+                  </div>
+               </div>
+               <div class="row text-center my-3">
+                  <div class="col-md-6">
+                     <!-- <h4 id="vga"></h4> -->
+                  </div>
+                  <div class="col-md-6">
+                     <!-- <h4 id="screen"></h4> -->
+                  </div>
+               </div>
+               <h3 class="my-5 text-center" id="harga_laptop"></h3>
             </div>
             <!--end::Modal body-->
+            <table class="fs-6 table table-hover table-bordered text-center">
+               <tbody>
+                  <tr>
+                     <td>Processor</td>
+                     <td>
+                        <span id="prosesor">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Memory </td>
+                     <td>
+                        <span id="ram">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>VGA Card </td>
+                     <td>
+                        <span id="vga">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Screen Size </td>
+                     <td>
+                        <span id="screen">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
          </div>
          <!--end::Modal content-->
       </div>
@@ -1208,10 +1237,10 @@ include 'header.php';
          console.log(gambar_laptop);
          document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
          document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
-         document.querySelector('#prosesor').innerHTML = "Processor : " + prosesor;
-         document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
-         document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
-         document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
+         document.querySelector('#prosesor').innerHTML = prosesor;
+         document.querySelector('#vga').innerHTML = vga;
+         document.querySelector('#ram').innerHTML = ram;
+         document.querySelector('#screen').innerHTML = screen;
 
          const formatter = new Intl.NumberFormat('id-ID', {
             style: 'currency',
