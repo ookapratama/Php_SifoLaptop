@@ -1,6 +1,8 @@
 <?php
 include 'controllers/admin/function.php';
 include 'header.php';
+
+
 ?>
 
 <!--begin::Body-->
@@ -139,20 +141,60 @@ include 'header.php';
             <div class="row g-lg-10 mb-10 mb-lg-20">
 
                <?php
-               $produks = select("SELECT laptop.*, 
-					ram_feature.nama_fitur AS ram,
-               prosesor_feature.nama_fitur AS prosesor,
-               storage_feature.nama_fitur AS storage,
-               vga_feature.nama_fitur AS vga,
-					screen_feature.nama_fitur AS screen,
-					kategori_laptop.nama_kategori
-					FROM laptop
-					JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
-					JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
-					JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
-					JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-					JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
-					LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
+
+               if (isset($_GET['submit_search'])) {
+                  $merk = $_GET['merk_laptop'];
+                  $prosesor = $_GET['prosesor'];
+                  $ram = $_GET['ram'];
+                  $vga = $_GET['vga'];
+                  $storage = $_GET['storage'];
+
+                  $harga_awal = (float)preg_replace("/[^0-9]/", '', $_GET['harga_awal']);
+                  $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
+                  // var_dump($ram);
+
+                  $produks = select("SELECT laptop.*, 
+                     ram_feature.nama_fitur AS ram,
+                     prosesor_feature.nama_fitur AS prosesor,
+                     storage_feature.nama_fitur AS storage,
+                     vga_feature.nama_fitur AS vga,
+                     screen_feature.nama_fitur AS screen,
+                     kategori_laptop.nama_kategori
+                     FROM laptop
+                     JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
+                     JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
+                     JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
+                     JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+                     JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
+                     LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
+                     WHERE
+                     merk_laptop LIKE '%" . $merk . "%'OR
+                     model_laptop LIKE '%" . $merk . "%' AND
+                     ram_feature.nama_fitur LIKE '%" . $ram . "%'AND
+                     prosesor_feature.nama_fitur LIKE '%" . $prosesor . "%'AND
+                     storage_feature.nama_fitur LIKE '%" . $storage . "%'AND
+                     vga_feature.nama_fitur LIKE '%" . $vga . "%'AND
+                     screen_feature.nama_fitur LIKE '%" . $screen . "%'
+                      ");
+                     // var_dump($produks);
+               } else {
+
+                  $produks = select("SELECT laptop.*, 
+                     ram_feature.nama_fitur AS ram,
+                     prosesor_feature.nama_fitur AS prosesor,
+                     storage_feature.nama_fitur AS storage,
+                     vga_feature.nama_fitur AS vga,
+                     screen_feature.nama_fitur AS screen,
+                     kategori_laptop.nama_kategori
+                     FROM laptop
+                     JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
+                     JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
+                     JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
+                     JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+                     JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
+                     LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
+               }
+
                while ($produk = mysqli_fetch_assoc($produks)) :
                ?>
                   <!--begin::Col-->
@@ -184,7 +226,7 @@ include 'header.php';
                                     <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
                                  </div>
                                  <div class="text-center">
-                                    <h3><?= $produk['harga_laptop'] ?></h3>
+                                    <h3>Rp. <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h3>
                                  </div>
                               </div>
                               <!--end::Modal body-->
@@ -1170,7 +1212,15 @@ include 'header.php';
          document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
          document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
          document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
-         document.querySelector('#harga_laptop').innerHTML = "Harga : " + harga_laptop;
+
+         const formatter = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+         });
+
+         const formatAngka = formatter.format(harga_laptop);
+         console.log(formatAngka);
+         document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatAngka;
          const gambar_laptop1 = document.querySelector('.modal-image');
          gambar_laptop1.src = 'admin/img/' + gambar_laptop;
       }

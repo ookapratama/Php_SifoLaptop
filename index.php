@@ -1,6 +1,18 @@
 <?php
 include 'controllers/admin/function.php';
 include 'header.php';
+
+// var_dump(isset($_POST['submit_search']));
+// if (isset($_POST['submit_search'])) {
+//    // var_dump($_POST);
+//    $search = search($_POST);
+
+//    if ($search) {
+//       echo "<script>
+//       document.location.href ='produk.php';
+//       </script>";
+//    }
+// }
 ?>
 
 <!--begin::Body-->
@@ -118,9 +130,10 @@ include 'header.php';
                   <!--end::Title-->
                   <!--begin::Action-->
                   <!-- <a href="../../demo1/dist/index.html" class="btn btn-primary">Try Metronic</a> -->
-                  <div class="input-group mb-3">
-                     <input type="text" class="form-control" placeholder="Cari Laptop " aria-label="Recipient's username" aria-describedby="button-addon2">
-                     <button class="btn btn-primary" type="button" id="button-addon2">Cari</button>
+                  <div class="input-group mb-3 d-grid gap-2">
+
+                     <!-- <input type="text" class="form-control" placeholder="Cari Laptop " aria-label="Recipient's username" aria-describedby="button-addon2"> -->
+                     <button class="btn btn-primary" type="button" id="button-addon2" data-bs-toggle="modal" data-bs-target="#kt_modal_new_target">Cari</button>
                   </div>
                   <!--end::Action-->
                </div>
@@ -292,7 +305,7 @@ include 'header.php';
                                     <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
                                  </div>
                                  <div class="text-center">
-                                    <h3><?= $produk['harga_laptop'] ?></h3>
+                                    <h3>Rp. <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h3>
                                  </div>
                               </div>
                               <!--end::Modal body-->
@@ -1267,6 +1280,152 @@ include 'header.php';
       <!--end::Modal dialog-->
    </div>
 
+   <!--begin::Modal - New Target-->
+   <div class="modal fade" id="kt_modal_new_target" tabindex="-1" aria-hidden="true">
+      <!--begin::Modal dialog-->
+      <div class="modal-dialog modal-dialog-centered mw-650px">
+         <!--begin::Modal content-->
+         <div class="modal-content rounded">
+            <!--begin::Modal header-->
+            <div class="modal-header pb-0 border-0 justify-content-end">
+               <!--begin::Close-->
+               <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                  <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                  <span class="svg-icon svg-icon-1">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+                     </svg>
+                  </span>
+                  <!--end::Svg Icon-->
+               </div>
+               <!--end::Close-->
+            </div>
+            <!--begin::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+               <!--begin:Form-->
+               <form  class="form" action="produk.php" method="GET">
+                  <!--begin::Heading-->
+                  <div class="mb-13 text-center">
+                     <!--begin::Title-->
+                     <h1 class="mb-3"></h1>
+                     <!--end::Title-->
+                     <!--begin::Description-->
+                     <div class="text-muted fw-semibold fs-5">Masukkan kata kunci pencarian laptop
+                     </div>
+                     <!--end::Description-->
+                  </div>
+                  <!--end::Heading-->
+                  <!--begin::Input group-->
+                  <div class="d-flex flex-column mb-8 fv-row">
+                     <!--begin::Label-->
+                     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Merk Laptop</span>
+                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                     </label>
+                     <!--end::Label-->
+                     <input type="text" class="form-control form-control-solid" placeholder="Masukkan merk prosesor" name="merk_laptop" />
+                  </div>
+                  <!--end::Input group-->
+                  <!--begin::Input group-->
+                  <div class="row g-9 mb-8">
+                     <!--begin::Col-->
+                     <div class="col-md-6 fv-row">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                           <span class="required">Processor</span>
+                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                        </label>
+                        <!--end::Label-->
+                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis Prosesor" name="prosesor" />
+                     </div>
+                     <!--end::Col-->
+                     <!--begin::Col-->
+                     <div class="col-md-6 fv-row">
+                        <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
+                        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="-- Pilih --" name="ram">
+                           <option value="" disabled selected>-- Pilih --</option>
+                           <option value="1">1 GB RAM</option>
+                           <option value="2">2 GB RAM</option>
+                           <option value="4">4 GB RAM</option>
+                           <option value="8">8 GB RAM</option>
+                           <option value="16">16 GB RAM</option>
+                           <option value="20">20 GB RAM</option>
+                           <option value="24">24 GB RAM</option>
+                        </select>
+                     </div>
+                     <!--end::Col-->
+                  </div>
+                  <!--end::Input group-->
+
+                  <!--begin::Input group-->
+                  <div class="row g-9 mb-8">
+                     <!--begin::Col-->
+                     <div class="col-md-6 fv-row">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                           <span class="required">VGA Card</span>
+                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                        </label>
+                        <!--end::Label-->
+                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis VGA Card" name="vga" />
+                     </div>
+                     <!--end::Col-->
+                     <!--begin::Col-->
+                     <div class="col-md-6 fv-row">
+                        <!--begin::Label-->
+                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                           <span class="required">Storage</span>
+                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                        </label>
+                        <!--end::Label-->
+                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan kapasitas storage" name="storage" />
+                     </div>
+                     <!--end::Col-->
+
+                  </div>
+                  <!--end::Input group-->
+                  <!--begin::Input group-->
+                  <div class="row g-9 mb-8">
+                     <!--begin::Col-->
+                     <!--begin::Label-->
+                     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                        <span class="required">Range Harga</span>
+                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                     </label>
+                     <!--end::Label-->
+                     <div class="col-md-6 fv-row">
+                        <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
+                     </div>
+                     <!--end::Col-->
+                     <!--begin::Col-->
+                     <div class="col-md-6 fv-row">
+                        <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah" />
+                     </div>
+                     <!--end::Col-->
+
+                  </div>
+                  <!--end::Input group-->
+
+                  <!--begin::Actions-->
+                  <div class="d-flex justify-content-end">
+                     <button type="submit" name="submit_search" class="btn btn-primary">
+                        <span class="indicator-label">Submit</span>
+                     </button>
+                  </div>
+                  <!--end::Actions-->
+               </form>
+               <!--end:Form-->
+            </div>
+            <!--end::Modal body-->
+         </div>
+         <!--end::Modal content-->
+      </div>
+      <!--end::Modal dialog-->
+   </div>
+   <!--end::Modal - New Target-->
+
    <script>
       function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, vga, screen, harga_laptop) {
          console.log(gambar_laptop);
@@ -1276,11 +1435,46 @@ include 'header.php';
          document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
          document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
          document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
-         document.querySelector('#harga_laptop').innerHTML = "Harga : " + harga_laptop;
+         
+         const formatter = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+         });
+
+         const formatAngka = formatter.format(harga_laptop);
+         console.log(formatAngka);
+         document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatAngka;
+         
          const gambar_laptop1 = document.querySelector('.modal-image');
          gambar_laptop1.src = 'admin/img/' + gambar_laptop;
       }
    </script>
+
+   <!-- start::Script ke rupiah -->
+   <script>
+      var convert_rupiah = document.getElementById('rupiah');
+      convert_rupiah.addEventListener('keyup', function(e) {
+         convert_rupiah.value = formatRupiah(this.value, 'Rp. ');
+      });
+
+      /* Fungsi */
+      function formatRupiah(angka, prefix) {
+         var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+         if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+         }
+
+         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+      }
+   </script>
+   <!-- end::Script ke rupiah -->
 
    <?php
    include 'footer.php';

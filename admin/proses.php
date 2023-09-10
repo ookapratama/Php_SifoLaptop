@@ -18,14 +18,17 @@ if ($proses == 'store') {
       $model_laptop = $_POST['model_laptop'];
       $storage_laptop = $_POST['storage_laptop'];
       $screen_laptop = $_POST['screen_laptop'];
+      
+      // $tes = "Rp. 5.100.000";
+      $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
+      // echo $harga;
 
       $uniq_name = upload_gambar();
-      // var_dump($model_laptop);
-
-      $data_query = "('', '$kategori_id', '$merk_laptop', '$no_serial', '$harga_laptop', '$ram_laptop', '$prosesor_laptop', '$storage_laptop', '$vga_laptop', '$screen_laptop', '$uniq_name', '$model_laptop')";
-
-      // echo $data_query;
+      
+      $data_query = "(null, '$kategori_id', '$merk_laptop', '$no_serial', '$harga', '$ram_laptop', '$prosesor_laptop', '$storage_laptop', '$vga_laptop', '$screen_laptop', '$uniq_name', '$model_laptop')";
+      
       $data_laptop = store("laptop", $data_query);
+      var_dump($data_laptop);
 
       if ($data_laptop > 0) {
          echo "<script>
@@ -86,7 +89,9 @@ if ($proses == 'store') {
          $uniq_name = upload_gambar();
       }
 
-      $data_query = "kategori_id = '$kategori_laptop', merk_laptop = '$merk_laptop', no_serial = '$no_serial', harga_laptop = '$harga_laptop', ram_laptop = '$ram_laptop', prosesor_laptop = '$prosesor_laptop', storage_laptop = '$storage_laptop', vga_laptop = '$vga_laptop', screen_laptop = '$screen_laptop', gambar_laptop = '$uniq_name', model_laptop = '$model_laptop' WHERE id_laptop = '$id_laptop'";
+      $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
+
+      $data_query = "kategori_id = '$kategori_laptop', merk_laptop = '$merk_laptop', no_serial = '$no_serial', harga_laptop = '$harga', ram_laptop = '$ram_laptop', prosesor_laptop = '$prosesor_laptop', storage_laptop = '$storage_laptop', vga_laptop = '$vga_laptop', screen_laptop = '$screen_laptop', gambar_laptop = '$uniq_name', model_laptop = '$model_laptop' WHERE id_laptop = '$id_laptop'";
 
       $data_laptop = update('laptop', $data_query);
 

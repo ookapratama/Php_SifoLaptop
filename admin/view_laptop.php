@@ -81,7 +81,7 @@ include 'header.php';
 								<p href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"><?= $data['no_serial'] ?></p>
 							</td>
 							<td>
-								<p href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6"><?= $data['harga_laptop'] ?></p>
+								<p href="#" class="text-dark fw-bold text-hover-primary d-block mb-1 fs-6">Rp. <?=   number_format($data['harga_laptop'], 0, ',', '.') ?></p>
 							</td>
 
 							<td>
