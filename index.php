@@ -107,7 +107,7 @@ include 'header.php';
                      <!--end::Menu wrapper-->
                      <!--begin::Toolbar-->
                      <div class="flex-equal text-end ms-1">
-                        <a href="../../demo1/dist/authentication/layouts/basic/sign-in.html" class="btn btn-success">Sign In</a>
+                        <a href="auth/login.php" class="btn btn-success">Sign In</a>
                      </div>
                      <!--end::Toolbar-->
                   </div>
@@ -464,7 +464,7 @@ include 'header.php';
                      <!--end::Logo image-->
                   </div>
                   <!--end::Copyright-->
-                  
+
                </div>
                <!--end::Wrapper-->
             </div>
@@ -1227,41 +1227,63 @@ include 'header.php';
                      <div class="carousel-item active ">
                         <img src="" class="d-block w-50 mx-auto modal-image" alt="">
                      </div>
-                     <!-- <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                     </div>
-                     <div class="carousel-item">
-                        <img src="..." class="d-block w-100" alt="...">
-                     </div> -->
                   </div>
-                  <div class="row mt-5 text-center">
-                     <div class="col-md-6">
-                        <h4 id="prosesor"></h4>
-                     </div>
-                     <div class="col-md-6">
-                        <h4 id="ram"></h4>
-                     </div>
-                  </div>
-                  <div class="row text-center my-3">
-                     <div class="col-md-6">
-                        <h4 id="vga"></h4>
-                     </div>
-                     <div class="col-md-6">
-                        <h4 id="screen"></h4>
-                     </div>
-                  </div>
-                  <h3 class="my-5 text-center" id="harga_laptop"></h3>
-                  <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Previous</span>
-                  </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                     <span class="visually-hidden">Next</span>
-                  </button> -->
                </div>
+               <div class="row mt-5 text-center">
+                  <div class="col-md-6">
+                     <!-- <h4 id="prosesor"></h4> -->
+                  </div>
+                  <div class="col-md-6">
+                     <!-- <h4 id="ram"></h4> -->
+                  </div>
+               </div>
+               <div class="row text-center my-3">
+                  <div class="col-md-6">
+                     <!-- <h4 id="vga"></h4> -->
+                  </div>
+                  <div class="col-md-6">
+                     <!-- <h4 id="screen"></h4> -->
+                  </div>
+               </div>
+               <h3 class="my-5 text-center" id="harga_laptop"></h3>
             </div>
             <!--end::Modal body-->
+            <table class="fs-6 table table-hover table-bordered text-center">
+               <tbody>
+                  <tr>
+                     <td>Processor</td>
+                     <td class="">
+                        <span id="prosesor">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Memory </td>
+                     <td>
+                        <span id="ram">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>VGA Card </td>
+                     <td>
+                        <span id="vga">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>Screen Size </td>
+                     <td>
+                        <span id="screen">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
          </div>
          <!--end::Modal content-->
       </div>
@@ -1293,7 +1315,7 @@ include 'header.php';
             <!--begin::Modal body-->
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
                <!--begin:Form-->
-               <form  class="form" action="produk.php" method="GET">
+               <form class="form" action="produk.php" method="GET">
                   <!--begin::Heading-->
                   <div class="mb-13 text-center">
                      <!--begin::Title-->
@@ -1309,8 +1331,7 @@ include 'header.php';
                   <div class="d-flex flex-column mb-8 fv-row">
                      <!--begin::Label-->
                      <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                        <span class="required">Merk Laptop</span>
-                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                        <span class="">Merk Laptop</span>
                      </label>
                      <!--end::Label-->
                      <input type="text" class="form-control form-control-solid" placeholder="Masukkan merk prosesor" name="merk_laptop" />
@@ -1322,8 +1343,7 @@ include 'header.php';
                      <div class="col-md-6 fv-row">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="required">Processor</span>
-                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                           <span class="">Processor</span>
                         </label>
                         <!--end::Label-->
                         <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis Prosesor" name="prosesor" />
@@ -1332,8 +1352,8 @@ include 'header.php';
                      <!--begin::Col-->
                      <div class="col-md-6 fv-row">
                         <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
-                        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="-- Pilih --" name="ram">
-                           <option value="" disabled selected>-- Pilih --</option>
+                        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"  name="ram">
+                           <option value="" selected>-- Pilih --</option>
                            <option value="1">1 GB RAM</option>
                            <option value="2">2 GB RAM</option>
                            <option value="4">4 GB RAM</option>
@@ -1353,8 +1373,7 @@ include 'header.php';
                      <div class="col-md-6 fv-row">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="required">VGA Card</span>
-                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                           <span class="">VGA Card</span>
                         </label>
                         <!--end::Label-->
                         <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis VGA Card" name="vga" />
@@ -1364,8 +1383,7 @@ include 'header.php';
                      <div class="col-md-6 fv-row">
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="required">Storage</span>
-                           <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                           <span class="">Storage</span>
                         </label>
                         <!--end::Label-->
                         <input type="text" class="form-control form-control-solid" placeholder="Masukkan kapasitas storage" name="storage" />
@@ -1379,8 +1397,7 @@ include 'header.php';
                      <!--begin::Col-->
                      <!--begin::Label-->
                      <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                        <span class="required">Range Harga</span>
-                        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
+                        <span class="">Range Harga</span>
                      </label>
                      <!--end::Label-->
                      <div class="col-md-6 fv-row">
@@ -1423,7 +1440,7 @@ include 'header.php';
          document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
          document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
          document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
-         
+
          const formatter = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR'
@@ -1432,7 +1449,7 @@ include 'header.php';
          const formatAngka = formatter.format(harga_laptop);
          console.log(formatAngka);
          document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatAngka;
-         
+
          const gambar_laptop1 = document.querySelector('.modal-image');
          gambar_laptop1.src = 'admin/img/' + gambar_laptop;
       }

@@ -98,7 +98,7 @@ include 'header.php';
                      <!--end::Menu wrapper-->
                      <!--begin::Toolbar-->
                      <div class="flex-equal text-end ms-1">
-                        <a href="../../demo1/dist/authentication/layouts/basic/sign-in.html" class="btn btn-success">Sign In</a>
+                        <a href="login.php" class="btn btn-success">Sign In</a>
                      </div>
                      <!--end::Toolbar-->
                   </div>
@@ -1194,7 +1194,7 @@ include 'header.php';
                <tbody>
                   <tr>
                      <td>Processor</td>
-                     <td>
+                     <td class="">
                         <span id="prosesor">
                            Pending
                         </span>

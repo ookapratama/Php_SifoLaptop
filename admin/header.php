@@ -1,3 +1,13 @@
+<?php
+
+   session_start();
+   if(empty($_SESSION['login'])) {
+      header("Location: ../auth/login.php");
+   }
+   
+
+?>
+
 <!DOCTYPE html>
 <!--
 Author: Keenthemes
@@ -123,7 +133,7 @@ License: For each use you must have a valid license purchased only from above li
                                  <!--end::Avatar-->
                                  <!--begin::Username-->
                                  <div class="d-flex flex-column">
-                                    <div class="fw-bold d-flex align-items-center fs-5">Max Smith
+                                    <div class="fw-bold d-flex align-items-center fs-5"><?= $_SESSION['username'] ?>
 
                                     </div>
 
@@ -140,7 +150,7 @@ License: For each use you must have a valid license purchased only from above li
                            <!--end::Menu item-->
                            <!--begin::Menu item-->
                            <div class="menu-item px-5">
-                              <a href="../../demo1/dist/authentication/layouts/corporate/sign-in.html" class="menu-link px-5">Sign Out</a>
+                              <a href="../auth/logout.php" class="menu-link px-5">Sign Out</a>
                            </div>
                            <!--end::Menu item-->
                         </div>
