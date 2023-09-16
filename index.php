@@ -1290,7 +1290,7 @@ include 'header.php';
       <!--end::Modal dialog-->
    </div>
 
-   <!--begin::Modal - New Target-->
+   <!--begin::Modal - Form search -->
    <div class="modal fade" id="kt_modal_new_target" tabindex="-1" aria-hidden="true">
       <!--begin::Modal dialog-->
       <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -1315,7 +1315,7 @@ include 'header.php';
             <!--begin::Modal body-->
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
                <!--begin:Form-->
-               <form class="form" action="produk.php" method="GET">
+               <form class="form" action="produk.php" id="wizardForm" method="GET">
                   <!--begin::Heading-->
                   <div class="mb-13 text-center">
                      <!--begin::Title-->
@@ -1327,99 +1327,161 @@ include 'header.php';
                      <!--end::Description-->
                   </div>
                   <!--end::Heading-->
+
+                  <!-- bar -->
+                  <!-- <div class="f1-steps">
+                     <div class="f1-progress">
+                        <div class="f1-progress-line" data-now-value="25" data-number-of-steps="4" style="width: 25%;"></div>
+                     </div>
+                     <div class="">
+
+                        <div class="f1-step active d-flex justify-content-center">
+                           <div class="f1-step-icon">
+                              <i class="fa fa-user" style="line-height:2 !important;margin-left:15px; margin-top: 3px; font-size: 1.5rem; color: white;"></i>
+                           </div>
+                        </div>
+
+                        <div class="f1-step  d-flex justify-content-center">
+                           <div class="f1-step-icon">
+                              <i class="fa fa-address-book" style="line-height:2 !important;margin-left:15px; margin-top: 3px; font-size: 1.5rem; color: white;"></i>
+                           </div>
+                        </div>
+
+                     </div>
+                  </div> -->
+
+
+                  <!-- start Step 1 -->
                   <!--begin::Input group-->
-                  <div class="d-flex flex-column mb-8 fv-row">
-                     <!--begin::Label-->
-                     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                        <span class="">Merk Laptop</span>
-                     </label>
-                     <!--end::Label-->
-                     <input type="text" class="form-control form-control-solid" placeholder="Masukkan merk prosesor" name="merk_laptop" />
-                  </div>
+                  <fieldset id="step1" class="step">
+                     <div class="row">
+                        <div class="col-md-6">
+                           <div class="d-flex flex-column mb-8 fv-row">
+                              <!--begin::Label-->
+                              <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                                 <span class="">Merk Laptop</span>
+                              </label>
+                              <!--end::Label-->
+                              <input type="text" class="form-control form-control-solid" placeholder="Masukkan merk prosesor"  name="merk_laptop" />
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <!--begin::Col-->
+
+                           <label class=" fs-6 fw-semibold mb-2">Kateogri Laptop</label>
+                           <select  class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="kategori_laptop">
+                              <option value="">-- Pilih --</option>
+                              <?php 
+                                 $result = select("SELECT * FROM kategori_laptop");
+                                 while($data = mysqli_fetch_assoc($result)):
+                              ?>
+                              <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                           <!--end::Col-->
+                        </div>
+                     </div>
+                     <div class="f1-buttons">
+                        <button type="button" id="next1" class="btn btn-primary btn-next">Next <i class="fa fa-arrow-right"></i></button>
+                     </div>
+                  </fieldset>
                   <!--end::Input group-->
+                  <!-- end Step 1 -->
+
+                  <!-- start Step 2 -->
                   <!--begin::Input group-->
-                  <div class="row g-9 mb-8">
-                     <!--begin::Col-->
-                     <div class="col-md-6 fv-row">
+                  <fieldset id="step2" class="step">
+                     
+
+                     <!--begin::Input group-->
+                     <div class="row g-9 mb-8">
+                        <!--begin::Col-->
+                        <div class="col-md-6 fv-row">
+                           <!--begin::Label-->
+                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                              <span class="">Processor</span>
+                           </label>
+                           <!--end::Label-->
+                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan jenis Prosesor" name="prosesor" />
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-6 fv-row">
+                           <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
+                           <select  class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="ram">
+                              <option value="" selected>-- Pilih --</option>
+                              <option value="1">1 GB RAM</option>
+                              <option value="2">2 GB RAM</option>
+                              <option value="4">4 GB RAM</option>
+                              <option value="8">8 GB RAM</option>
+                              <option value="16">16 GB RAM</option>
+                              <option value="20">20 GB RAM</option>
+                              <option value="24">24 GB RAM</option>
+                           </select>
+                        </div>
+                        <!--end::Col-->
+                     </div>
+                     <!--end::Input group-->
+
+                     <!--begin::Input group-->
+                     <div class="row g-9 mb-8">
+                        <!--begin::Col-->
+                        <div class="col-md-6 fv-row">
+                           <!--begin::Label-->
+                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                              <span class="">VGA Card</span>
+                           </label>
+                           <!--end::Label-->
+                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan jenis VGA Card" name="vga" />
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-6 fv-row">
+                           <!--begin::Label-->
+                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                              <span class="">Storage</span>
+                           </label>
+                           <!--end::Label-->
+                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan kapasitas storage" name="storage" />
+                        </div>
+                        <!--end::Col-->
+
+                     </div>
+                     <!--end::Input group-->
+                     <!--begin::Input group-->
+                     <div class="row g-9 mb-8">
+                        <!--begin::Col-->
                         <!--begin::Label-->
                         <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="">Processor</span>
+                           <span class="">Range Harga</span>
                         </label>
                         <!--end::Label-->
-                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis Prosesor" name="prosesor" />
-                     </div>
-                     <!--end::Col-->
-                     <!--begin::Col-->
-                     <div class="col-md-6 fv-row">
-                        <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
-                        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"  name="ram">
-                           <option value="" selected>-- Pilih --</option>
-                           <option value="1">1 GB RAM</option>
-                           <option value="2">2 GB RAM</option>
-                           <option value="4">4 GB RAM</option>
-                           <option value="8">8 GB RAM</option>
-                           <option value="16">16 GB RAM</option>
-                           <option value="20">20 GB RAM</option>
-                           <option value="24">24 GB RAM</option>
-                        </select>
-                     </div>
-                     <!--end::Col-->
-                  </div>
-                  <!--end::Input group-->
+                        <div class="col-md-6 fv-row">
+                           <input   type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-6 fv-row">
+                           <input   type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah1" />
+                        </div>
+                        <!--end::Col-->
 
-                  <!--begin::Input group-->
-                  <div class="row g-9 mb-8">
-                     <!--begin::Col-->
-                     <div class="col-md-6 fv-row">
-                        <!--begin::Label-->
-                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="">VGA Card</span>
-                        </label>
-                        <!--end::Label-->
-                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan jenis VGA Card" name="vga" />
                      </div>
-                     <!--end::Col-->
-                     <!--begin::Col-->
-                     <div class="col-md-6 fv-row">
-                        <!--begin::Label-->
-                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="">Storage</span>
-                        </label>
-                        <!--end::Label-->
-                        <input type="text" class="form-control form-control-solid" placeholder="Masukkan kapasitas storage" name="storage" />
-                     </div>
-                     <!--end::Col-->
+                     <!--end::Input group-->
+                     <!-- end step 2 -->
 
-                  </div>
-                  <!--end::Input group-->
-                  <!--begin::Input group-->
-                  <div class="row g-9 mb-8">
-                     <!--begin::Col-->
-                     <!--begin::Label-->
-                     <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                        <span class="">Range Harga</span>
-                     </label>
-                     <!--end::Label-->
-                     <div class="col-md-6 fv-row">
-                        <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
-                     </div>
-                     <!--end::Col-->
-                     <!--begin::Col-->
-                     <div class="col-md-6 fv-row">
-                        <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah" />
-                     </div>
-                     <!--end::Col-->
+                     <!--begin::Actions-->
+                     <div class="f1-buttons">
+                        <button type="button" id="prev2" class="btn btn-warning btn-previous"><i class="fa fa-arrow-left"></i> Sebelumnya
+                        </button>
 
-                  </div>
-                  <!--end::Input group-->
+                        <button type="submit" name="submit_search" class="btn btn-primary">
+                           <span class="indicator-label">Submit</span>
+                        </button>
+                     </div>
+                     <!--end::Actions-->
+                  </fieldset>
 
-                  <!--begin::Actions-->
-                  <div class="d-flex justify-content-end">
-                     <button type="submit" name="submit_search" class="btn btn-primary">
-                        <span class="indicator-label">Submit</span>
-                     </button>
-                  </div>
-                  <!--end::Actions-->
                </form>
                <!--end:Form-->
             </div>
@@ -1431,6 +1493,7 @@ include 'header.php';
    </div>
    <!--end::Modal - New Target-->
 
+   <!-- passing data per produk ke modal -->
    <script>
       function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, vga, screen, harga_laptop) {
          console.log(gambar_laptop);
@@ -1480,6 +1543,93 @@ include 'header.php';
       }
    </script>
    <!-- end::Script ke rupiah -->
+   <!-- start::Script ke rupiah -->
+   <script>
+      var convert_rupiah1 = document.getElementById('rupiah1');
+      convert_rupiah1.addEventListener('keyup', function(e) {
+         convert_rupiah1.value = formatRupiah1(this.value, 'Rp. ');
+      });
+
+      /* Fungsi */
+      function formatRupiah1(angka, prefix) {
+         var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
+            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+         if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+         }
+
+         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+      }
+   </script>
+   <!-- end::Script ke rupiah -->
+
+   <!-- Wizard modal search -->
+   <script>
+      document.addEventListener("DOMContentLoaded", function() {
+         const form = document.getElementById("wizardForm");
+         const steps = document.querySelectorAll(".step");
+         let currentStep = 0;
+
+         function showStep(stepIndex) {
+            steps.forEach((step, index) => {
+               if (index === stepIndex) {
+                  step.style.display = "block";
+               } else {
+                  step.style.display = "none";
+               }
+            });
+         }
+
+         showStep(currentStep);
+
+         const nextButtons = document.querySelectorAll("[id^='next']");
+         const prevButtons = document.querySelectorAll("[id^='prev']");
+
+         nextButtons.forEach((button, index) => {
+            button.addEventListener("click", function(e) {
+               e.preventDefault();
+               if (validateStep(currentStep)) {
+                  if (currentStep < steps.length - 1) {
+                     currentStep++;
+                     showStep(currentStep);
+                  }
+               } else {
+                  alert("Harap isi semua field sebelum melanjutkan.");
+                  // swal('success');
+               }
+            });
+         });
+
+         prevButtons.forEach((button, index) => {
+            button.addEventListener("click", function(e) {
+               e.preventDefault();
+               if (currentStep > 0) {
+                  currentStep--;
+                  showStep(currentStep);
+               }
+            });
+         });
+
+         function validateStep(stepIndex) {
+            const inputs = steps[stepIndex].querySelectorAll("input[required]");
+            let isValid = true;
+
+            inputs.forEach((input) => {
+               if (input.value.trim() === "") {
+                  isValid = false;
+               }
+            });
+
+            return isValid;
+         }
+      });
+   </script>
 
    <?php
    include 'footer.php';

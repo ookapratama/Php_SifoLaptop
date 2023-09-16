@@ -143,6 +143,7 @@ include 'header.php';
                <?php
 
                if (isset($_GET['submit_search'])) {
+                  $kategori_laptop = $_GET['kategori_laptop'];
                   $merk = $_GET['merk_laptop'];
                   $prosesor = $_GET['prosesor'];
                   $ram = $_GET['ram'];
@@ -151,7 +152,7 @@ include 'header.php';
 
                   $harga_awal = (float)preg_replace("/[^0-9]/", '', $_GET['harga_awal']);
                   $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
-                  // var_dump($ram);
+                  // var_dump($harga_maks );
 
                   $produks = select("SELECT laptop.*, 
                      ram_feature.nama_fitur AS ram,
@@ -168,7 +169,9 @@ include 'header.php';
                      JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
                      LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
                      WHERE
+                     harga_laptop BETWEEN $harga_awal AND $harga_maks OR
                      merk_laptop LIKE '%" . $merk . "%'OR
+                     kategori_laptop.nama_kategori '%". $kategori_laptop ."%' AND
                      model_laptop LIKE '%" . $merk . "%' AND
                      ram_feature.nama_fitur LIKE '%" . $ram . "%'AND
                      prosesor_feature.nama_fitur LIKE '%" . $prosesor . "%'AND
@@ -176,7 +179,7 @@ include 'header.php';
                      vga_feature.nama_fitur LIKE '%" . $vga . "%'AND
                      screen_feature.nama_fitur LIKE '%" . $screen . "%'
                       ");
-                  // var_dump($produks);
+                  var_dump($produks);
                } else {
 
                   $produks = select("SELECT laptop.*, 

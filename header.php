@@ -28,5 +28,6 @@
    <link href="assets/sass/components/_card.scss" rel="stylesheet" type="text/css" />
    <link href="assets/sass/components/components.scss" rel="stylesheet" type="text/css" />
    <!--end::Global Stylesheets Bundle-->
+   <link href="assets/css/wizard.css" rel="stylesheet" type="text/css" />
 </head>
 <!--end::Head-->
