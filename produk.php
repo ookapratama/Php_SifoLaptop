@@ -98,7 +98,7 @@ include 'header.php';
                      <!--end::Menu wrapper-->
                      <!--begin::Toolbar-->
                      <div class="flex-equal text-end ms-1">
-                        <a href="login.php" class="btn btn-success">Sign In</a>
+                        <a href="auth/login.php" class="btn btn-success">Sign In</a>
                      </div>
                      <!--end::Toolbar-->
                   </div>
@@ -149,6 +149,7 @@ include 'header.php';
                   $ram = $_GET['ram'];
                   $vga = $_GET['vga'];
                   $storage = $_GET['storage'];
+                  $screen = $_GET['screen'];
 
                   $harga_awal = (float)preg_replace("/[^0-9]/", '', $_GET['harga_awal']);
                   $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
@@ -178,6 +179,8 @@ include 'header.php';
                   kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
               WHERE
                   (harga_laptop BETWEEN $harga_awal AND $harga_maks)
+                  OR
+                  kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'
                   AND
                   merk_laptop LIKE '%$merk%'
                   AND
@@ -192,11 +195,9 @@ include 'header.php';
                   vga_feature.nama_fitur LIKE '%$vga%'
                   AND
                   screen_feature.nama_fitur LIKE '%$screen%'
-                  AND
-                  kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'
-              
                       ");
-                  // var_dump($produks);
+                  // var_dump($screen);
+                  var_dump($produks);
                } else {
 
                   $produks = select("SELECT laptop.*, 

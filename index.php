@@ -1355,27 +1355,33 @@ include 'header.php';
                   <!--begin::Input group-->
                   <fieldset id="step1" class="step">
                      <div class="row">
+
                         <div class="col-md-6">
-                           <div class="d-flex flex-column mb-8 fv-row">
-                              <!--begin::Label-->
-                              <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                                 <span class="">Merk Laptop</span>
-                              </label>
-                              <!--end::Label-->
-                              <input type="text" class="form-control form-control-solid" placeholder="Masukkan merk prosesor"  name="merk_laptop" />
-                           </div>
+                           <!--begin::Col-->
+
+                           <label class=" fs-6 fw-semibold mb-2">Merk Laptop</label>
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="merk_laptop">
+                              <option value="">-- Pilih --</option>
+                              <?php
+                              $result = select("SELECT merk_laptop FROM laptop");
+                              while ($data = mysqli_fetch_assoc($result)) :
+                              ?>
+                                 <option value="<?= $data['merk_laptop'] ?>"><?= $data['merk_laptop'] ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                           <!--end::Col-->
                         </div>
                         <div class="col-md-6">
                            <!--begin::Col-->
 
                            <label class=" fs-6 fw-semibold mb-2">Kateogri Laptop</label>
-                           <select  class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="kategori_laptop">
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="kategori_laptop">
                               <option value="">-- Pilih --</option>
-                              <?php 
-                                 $result = select("SELECT * FROM kategori_laptop");
-                                 while($data = mysqli_fetch_assoc($result)):
+                              <?php
+                              $result = select("SELECT * FROM kategori_laptop");
+                              while ($data = mysqli_fetch_assoc($result)) :
                               ?>
-                              <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
+                                 <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
                               <?php endwhile; ?>
                            </select>
                            <!--end::Col-->
@@ -1391,24 +1397,27 @@ include 'header.php';
                   <!-- start Step 2 -->
                   <!--begin::Input group-->
                   <fieldset id="step2" class="step">
-                     
+
 
                      <!--begin::Input group-->
                      <div class="row g-9 mb-8">
                         <!--begin::Col-->
-                        <div class="col-md-6 fv-row">
-                           <!--begin::Label-->
-                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                              <span class="">Processor</span>
-                           </label>
-                           <!--end::Label-->
-                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan jenis Prosesor" name="prosesor" />
+                        <div class="col-md-6">
+                           <!--begin::Col-->
+
+                           <label class=" fs-6 fw-semibold mb-2">Processor Laptop</label>
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="prosesor">
+                              <option value="" selected>-- Pilih --</option>
+                              <option value="Intel">Intel</option>
+                              <option value="AMD">AMD</option>
+                           </select>
+                           <!--end::Col-->
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-6 fv-row">
                            <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
-                           <select  class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="ram">
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="ram">
                               <option value="" selected>-- Pilih --</option>
                               <option value="1">1 GB RAM</option>
                               <option value="2">2 GB RAM</option>
@@ -1426,23 +1435,42 @@ include 'header.php';
                      <!--begin::Input group-->
                      <div class="row g-9 mb-8">
                         <!--begin::Col-->
-                        <div class="col-md-6 fv-row">
-                           <!--begin::Label-->
-                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                              <span class="">VGA Card</span>
-                           </label>
-                           <!--end::Label-->
-                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan jenis VGA Card" name="vga" />
+                        <div class="col-md-6">
+                           <!--begin::Col-->
+
+                           <label class=" fs-6 fw-semibold mb-2">VGA Laptop</label>
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="vga">
+                              <option value="" selected>-- Pilih --</option>
+                              <option value="Intel">Intel</option>
+                              <option value="AMD">AMD</option>
+                              <option value="Nvidia">Nvidia</option>
+                           </select>
+                           <!--end::Col-->
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
-                        <div class="col-md-6 fv-row">
-                           <!--begin::Label-->
-                           <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                              <span class="">Storage</span>
-                           </label>
-                           <!--end::Label-->
-                           <input  type="text" class="form-control form-control-solid" placeholder="Masukkan kapasitas storage" name="storage" />
+                        <div class="col-md-3 fv-row">
+                           <label class="required fs-6 fw-semibold mb-2">Storage</label>
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="storage">
+                              <option value="" selected>-- Pilih --</option>
+                              <option value="hdd">HDD</option>
+                              <option value="ssd">SSD</option>
+                           </select>
+                        </div>
+                        <!--end::Col-->
+                        <!--begin::Col-->
+                        <div class="col-md-3 fv-row">
+                           <label class="required fs-6 fw-semibold mb-2">Screen Size</label>
+                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="screen">
+                              <option value="">-- Pilih --</option>
+                              <?php
+                              $result = select("SELECT DISTINCT screen_feature.nama_fitur AS screen FROM laptop JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur");
+                              while ($data = mysqli_fetch_assoc($result)) :
+                              ?>
+                                 <option value="<?= $data['screen'] ?>"><?= $data['screen'] ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                           <!--end::Col-->
                         </div>
                         <!--end::Col-->
 
@@ -1457,12 +1485,12 @@ include 'header.php';
                         </label>
                         <!--end::Label-->
                         <div class="col-md-6 fv-row">
-                           <input   type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
+                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-6 fv-row">
-                           <input   type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah1" />
+                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah1" />
                         </div>
                         <!--end::Col-->
 

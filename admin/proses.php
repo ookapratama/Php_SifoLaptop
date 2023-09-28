@@ -40,7 +40,7 @@ if ($proses == 'store') {
 
       $nama_kategori = $_POST['kategori_laptop'];
 
-      $data_query = "('', '$nama_kategori')";
+      $data_query = "(null, '$nama_kategori')";
       // var_dump($data_query);
       $data_laptop = store('kategori_laptop', $data_query);
 
@@ -55,7 +55,7 @@ if ($proses == 'store') {
       $jenis_fitur = $_POST['jenis_fitur'];
       $nama_fitur = $_POST['nama_fitur'];
 
-      $data_query = "('', '$jenis_fitur', '$nama_fitur')";
+      $data_query = "(null, '$jenis_fitur', '$nama_fitur')";
       $data_fitur = store('fitur_laptop', $data_query);
 
       if ($data_fitur > 0) {
