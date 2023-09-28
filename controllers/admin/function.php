@@ -16,8 +16,7 @@ function store($table, $data)
 
    global $db;
 
-   
-   
+
    // $merk_laptop = $data['merk_laptop'];
    // $kategori_id = $data['kategori_laptop'];
    // $no_serial = $data['no_serial'];
@@ -28,9 +27,15 @@ function store($table, $data)
    // $model_laptop = $data['model_laptop'];
    // $storage_laptop = $data['storage_laptop'];
 
-   echo $data;
+   // echo $data;
+   // var_dump($data);
+   try {
+      //code...
+      $exec_query = mysqli_query($db, "INSERT INTO $table VALUES $data");
+   } catch (\Throwable $th) {
+      echo $th;
+   }
    // var_dump($exec_query);
-   $exec_query = mysqli_query($db, "INSERT INTO $table VALUES $data");
 
    return mysqli_affected_rows($db);
 }
