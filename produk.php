@@ -155,7 +155,7 @@ include 'header.php';
                   $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
                   // var_dump($harga_maks );
 
-                  $produks = select("SELECT
+                  $query = "SELECT
                   laptop.*,
                   ram_feature.nama_fitur AS ram,
                   prosesor_feature.nama_fitur AS prosesor,
@@ -177,25 +177,40 @@ include 'header.php';
                   fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
               LEFT JOIN
                   kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
-              WHERE
-                  (harga_laptop BETWEEN $harga_awal AND $harga_maks)
-                  AND
-                  kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'
-                  AND
-                  merk_laptop LIKE '%$merk%'
-                  AND
-                  model_laptop LIKE '%$merk%'
-                  AND
-                  ram_feature.nama_fitur LIKE '%$ram%'
-                  AND
-                  prosesor_feature.nama_fitur LIKE '%$prosesor%'
-                  AND
-                  storage_feature.nama_fitur LIKE '%$storage%'
-                  AND
-                  vga_feature.nama_fitur LIKE '%$vga%'
-                  AND
-                  screen_feature.nama_fitur LIKE '%$screen%'
-                      ");
+              WHERE 1 ";
+                  if (!empty($kategori_laptop)) {
+                     $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
+                  }
+
+                  if (!empty($merk)) {
+                     $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
+                  }
+
+                  if (!empty($prosesor)) {
+                     $query .= " AND prosesor_feature.nama_fitur LIKE '%$prosesor%'";
+                  }
+
+                  if (!empty($ram)) {
+                     $query .= " AND ram_feature.nama_fitur LIKE '%$ram%'";
+                  }
+
+                  if (!empty($vga)) {
+                     $query .= " AND vga_feature.nama_fitur LIKE '%$vga%'";
+                  }
+
+                  if (!empty($storage)) {
+                     $query .= " AND storage_feature.nama_fitur LIKE '%$storage%'";
+                  }
+
+                  if (!empty($screen)) {
+                     $query .= " AND screen_feature.nama_fitur LIKE '%$screen%'";
+                  }
+
+                  if (!empty($harga_awal) && !empty($harga_maks)) {
+                     $query .= " AND harga_laptop BETWEEN $harga_awal AND $harga_maks";
+                  }
+                  $produks = select($query);
+
                   // var_dump($screen);
 
                   // var_dump(mysqli_num_rows($produks));

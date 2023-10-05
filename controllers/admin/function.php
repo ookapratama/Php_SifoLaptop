@@ -34,6 +34,7 @@ function store($table, $data)
       $exec_query = mysqli_query($db, "INSERT INTO $table VALUES $data");
    } catch (\Throwable $th) {
       echo $th;
+      var_dump($th);
    }
    // var_dump($exec_query);
 
