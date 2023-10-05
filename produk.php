@@ -179,7 +179,7 @@ include 'header.php';
                   kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
               WHERE
                   (harga_laptop BETWEEN $harga_awal AND $harga_maks)
-                  OR
+                  AND
                   kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'
                   AND
                   merk_laptop LIKE '%$merk%'
@@ -197,7 +197,8 @@ include 'header.php';
                   screen_feature.nama_fitur LIKE '%$screen%'
                       ");
                   // var_dump($screen);
-                  var_dump($produks);
+
+                  // var_dump(mysqli_num_rows($produks));
                } else {
 
                   $produks = select("SELECT laptop.*, 
@@ -216,54 +217,60 @@ include 'header.php';
                      LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
                }
 
-               while ($produk = mysqli_fetch_assoc($produks)) :
+               if (mysqli_num_rows($produks) != 0) {
+                  while ($produk = mysqli_fetch_assoc($produks)) :
+                     // var_dump($produk);
                ?>
-                  <!--begin::Col-->
-                  <div class="col-lg-4">
-                     <!--begin::Testimonial-->
-                     <!--begin::Modal - New Card-->
-                     <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                        <!--begin::Modal dialog-->
-                        <div class="modal-dialog modal-dialog-centered mw-650px">
-                           <!--begin::Modal content-->
-                           <div class="modal-content">
-                              <!--begin::Modal header-->
-                              <div class="modal-header m-3 py-5 px-3">
-                                 <!--begin::Modal title-->
-                                 <h2><?= $produk['merk_laptop'] ?> - <?= $produk['model_laptop'] ?> <br> <?= $produk['nama_kategori'] ?></h2>
-                                 <!--end::Modal title-->
+                     <!--begin::Col-->
+                     <div class="col-lg-4">
+                        <!--begin::Testimonial-->
+                        <!--begin::Modal - New Card-->
+                        <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
+                           <!--begin::Modal dialog-->
+                           <div class="modal-dialog modal-dialog-centered mw-650px">
+                              <!--begin::Modal content-->
+                              <div class="modal-content">
+                                 <!--begin::Modal header-->
+                                 <div class="modal-header m-3 py-5 px-3">
+                                    <!--begin::Modal title-->
+                                    <h2><?= $produk['merk_laptop'] ?> - <?= $produk['model_laptop'] ?> <br> <?= $produk['nama_kategori'] ?></h2>
+                                    <!--end::Modal title-->
 
-                              </div>
-                              <!--end::Modal header-->
-                              <!--begin::Modal body-->
-                              <div class="modal-body scroll-y mx-5 my-3    ">
+                                 </div>
+                                 <!--end::Modal header-->
+                                 <!--begin::Modal body-->
+                                 <div class="modal-body scroll-y mx-5 my-3    ">
 
-                                 <img src="admin/img/<?= $produk['gambar_laptop'] ?>" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                                 <div class="text-left my-3">
-                                    <span class="text-muted d-block">Processor : <?= $produk['prosesor'] ?></span>
-                                    <span class="text-muted d-block">Ram : <?= $produk['ram'] ?> </span>
-                                    <span class="text-muted d-block">Storage : <?= $produk['storage'] ?></span>
-                                    <span class="text-muted d-block">VGA Card : <?= $produk['vga'] ?></span>
-                                    <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
+                                    <img src="admin/img/<?= $produk['gambar_laptop'] ?>" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
+                                    <div class="text-left my-3">
+                                       <span class="text-muted d-block">Processor : <?= $produk['prosesor'] ?></span>
+                                       <span class="text-muted d-block">Ram : <?= $produk['ram'] ?> </span>
+                                       <span class="text-muted d-block">Storage : <?= $produk['storage'] ?></span>
+                                       <span class="text-muted d-block">VGA Card : <?= $produk['vga'] ?></span>
+                                       <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
+                                    </div>
+                                    <div class="text-center">
+                                       <h3>Rp. <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h3>
+                                    </div>
                                  </div>
-                                 <div class="text-center">
-                                    <h3>Rp. <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h3>
+                                 <!--end::Modal body-->
+                                 <div class="d-grid gap-2">
+                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
                                  </div>
                               </div>
-                              <!--end::Modal body-->
-                              <div class="d-grid gap-2">
-                                 <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
-                              </div>
+                              <!--end::Modal content-->
                            </div>
-                           <!--end::Modal content-->
+                           <!--end::Modal dialog-->
                         </div>
-                        <!--end::Modal dialog-->
+                        <!--end::Modal - New Card-->
+                        <!--end::Testimonial-->
                      </div>
-                     <!--end::Modal - New Card-->
-                     <!--end::Testimonial-->
-                  </div>
-                  <!--end::Col-->
-               <?php endwhile; ?>
+                     <!--end::Col-->
+                  <?php endwhile; ?>
+               <?php } else {
+               ?>
+                  <h2 class="text-center">Data Tidak ada</h2>
+               <?php } ?>
 
 
 
