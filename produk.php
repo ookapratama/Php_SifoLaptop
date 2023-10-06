@@ -155,6 +155,15 @@ include 'header.php';
                   $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
                   // var_dump($harga_maks );
 
+
+                  if ($harga_awal > $harga_maks || $harga_maks < $harga_awal || $harga_awal == '' || $harga_maks == '') {
+                     echo "<script>
+                     alert('Range harga tidak valid');
+                     document.location.href ='index.php';
+                     </script>";
+                     exit();
+                  }
+
                   $query = "SELECT
                   laptop.*,
                   ram_feature.nama_fitur AS ram,
@@ -209,6 +218,7 @@ include 'header.php';
                   if (!empty($harga_awal) && !empty($harga_maks)) {
                      $query .= " AND harga_laptop BETWEEN $harga_awal AND $harga_maks";
                   }
+
                   $produks = select($query);
 
                   // var_dump($screen);

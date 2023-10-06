@@ -1363,7 +1363,7 @@ include 'header.php';
                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="merk_laptop">
                               <option value="">-- Pilih --</option>
                               <?php
-                              $result = select("SELECT merk_laptop FROM laptop");
+                              $result = select("SELECT DISTINCT merk_laptop FROM laptop");
                               while ($data = mysqli_fetch_assoc($result)) :
                               ?>
                                  <option value="<?= $data['merk_laptop'] ?>"><?= $data['merk_laptop'] ?></option>
@@ -1485,12 +1485,12 @@ include 'header.php';
                         </label>
                         <!--end::Label-->
                         <div class="col-md-6 fv-row">
-                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" id="rupiah" />
+                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" value="Rp. 1.000.000" id="rupiah" />
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-6 fv-row">
-                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" id="rupiah1" />
+                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" value="Rp. 10.000.000" id="rupiah1" />
                         </div>
                         <!--end::Col-->
 
