@@ -1,21 +1,20 @@
-<?php 
+<?php
 
 include '../controllers/auth/function.php';
 
 if (isset($_POST['login'])) {
-   
+
    $result = login($_POST);
 
    // var_dump($result);
    if ($result > 0) {
       session_start();
-      
+
       $_SESSION['username'] = 'Administrator';
       $_SESSION['login'] = true;
       // var_dump($_SESSION);
       header("Location: ../admin/index.php");
-   }
-   else {
+   } else {
       var_dump(false);
    }
 }
@@ -102,11 +101,12 @@ License: For each use you must have a valid license purchased only from above li
             <div class="d-flex flex-center flex-lg-start flex-column">
                <!--begin::Logo-->
                <a href="../../demo1/dist/index.html" class="mb-7">
-                  <img alt="Logo" src="../assets/media/logos/custom-3.svg" />
+                  <img alt="Logo" src="../assets/img/brand.png" />
                </a>
                <!--end::Logo-->
                <!--begin::Title-->
-               <h2 class="text-white fw-normal m-0">Branding tools designed for your business</h2>
+               <h2 class="text-white fw-normal m-0">Find your Laptop
+                  and We Will Help You</h2>
                <!--end::Title-->
             </div>
             <!--begin::Aside-->
@@ -119,7 +119,7 @@ License: For each use you must have a valid license purchased only from above li
                <!--begin::Card body-->
                <div class="card-body p-10 p-lg-20">
                   <!--begin::Form-->
-                  <form class="form w-100" novalidate="novalidate"  action="" method="POST">
+                  <form class="form w-100" novalidate="novalidate" action="" method="POST">
                      <!--begin::Heading-->
                      <div class="text-center mb-11">
                         <!--begin::Title-->
@@ -130,7 +130,7 @@ License: For each use you must have a valid license purchased only from above li
                         <!--end::Subtitle=-->
                      </div>
                      <!--begin::Heading-->
-                     
+
                      <!--begin::Input group=-->
                      <div class="fv-row mb-8">
                         <!--begin::Email-->
@@ -144,7 +144,7 @@ License: For each use you must have a valid license purchased only from above li
                         <!--end::Password-->
                      </div>
                      <!--end::Input group=-->
-                    
+
                      <!--begin::Submit button-->
                      <div class="d-grid mb-10">
                         <button type="submit" name="login" class="btn btn-primary">
@@ -158,7 +158,7 @@ License: For each use you must have a valid license purchased only from above li
                         </button>
                      </div>
                      <!--end::Submit button-->
-                     
+
                   </form>
                   <!--end::Form-->
                </div>

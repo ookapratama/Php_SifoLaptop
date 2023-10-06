@@ -25,7 +25,7 @@ License: For each use you must have a valid license purchased only from above li
 
 <head>
    <base href="" />
-   <title>Metronic - Admin</title>
+   <title>HnD Computer - Admin</title>
    <meta charset="utf-8" />
    <meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue, Asp.Net Core, Blazor, Django, Flask & Laravel versions. Grab your copy now and get life-time updates for free." />
    <meta name="keywords" content="metronic, bootstrap, bootstrap 5, angular, VueJs, React, Asp.Net Core, Blazor, Django, Flask & Laravel starter kits, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
@@ -36,7 +36,8 @@ License: For each use you must have a valid license purchased only from above li
    <meta property="og:url" content="https://keenthemes.com/metronic" />
    <meta property="og:site_name" content="Keenthemes | Metronic" />
    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-   <link rel="shortcut icon" href="../assets/media/logos/favicon.ico" />
+   <link rel="shortcut icon" href="../../assets/img/brand.png" />
+
    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/> -->
 
    <!--begin::Fonts-->
@@ -103,7 +104,7 @@ License: For each use you must have a valid license purchased only from above li
                   <a href="../../demo1/dist/index.html" class="d-lg-none">
                      <img alt="Logo" src="../assets/media/logos/default-small.svg" class="h-30px" />
                   </a>
-               </div>
+               </div>   
                <!--end::Mobile logo-->
                <!--begin::Header wrapper-->
                <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1" id="kt_app_header_wrapper">
@@ -188,8 +189,8 @@ License: For each use you must have a valid license purchased only from above li
                <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                   <!--begin::Logo image-->
                   <a href="../../demo1/dist/index.html">
-                     <img alt="Logo" src="../assets/media/logos/default-dark.svg" class="h-25px app-sidebar-logo-default" />
-                     <img alt="Logo" src="../assets/media/logos/default-small.svg" class="h-20px app-sidebar-logo-minimize" />
+                     <img alt="Logo" src="../assets/img/brand.png" class="h-25px app-sidebar-logo-default" />
+                     <img alt="Logo" src="../assets/img/brand.png" class="h-20px app-sidebar-logo-minimize" />
                   </a>
                   <!--end::Logo image-->
                   <!--begin::Sidebar toggle-->
