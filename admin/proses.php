@@ -24,11 +24,11 @@ if ($proses == 'store') {
       // echo $harga;
 
       $uniq_name = upload_gambar();
-      
+      // var_dump($uniq_name);
       $data_query = "(null, '$kategori_id', '$merk_laptop', '$no_serial', '$harga', '$ram_laptop', '$prosesor_laptop', '$storage_laptop', '$vga_laptop', '$screen_laptop', '$uniq_name', '$model_laptop')";
       
       $data_laptop = store("laptop", $data_query);
-      var_dump($data_laptop);
+      // var_dump($data_laptop);
 
       if ($data_laptop > 0) {
          echo "<script>
