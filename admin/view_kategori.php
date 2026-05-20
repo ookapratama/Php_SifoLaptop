@@ -15,6 +15,7 @@ include 'header.php';
 		<h3 class="card-title align-items-start flex-column">
 			<span class="card-label fw-bold fs-3 mb-1">New Arrivals</span>
 		</h3>
+		<?php if ($_SESSION['role'] === 'admin'): ?>
 		<div class="card-toolbar">
 			<a href="tambah_kategori.php" class="btn btn-sm btn-light-primary" >
 				<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
@@ -26,6 +27,7 @@ include 'header.php';
 				</span>
 				<!--end::Svg Icon-->Tambah Kategori</a>
 		</div>
+		<?php endif; ?>
 	</div>
 	<!--end::Header-->
 	<!--begin::Body-->
@@ -38,7 +40,11 @@ include 'header.php';
 				<thead>
 					<tr class="fw-bold text-muted bg-light">
 						<th class="ps-4 min-w-325px rounded-start">Nama Kategori</th>
+						<?php if ($_SESSION['role'] === 'admin'): ?>
 						<th class="min-w-150px text-end rounded-end"></th>
+						<?php else: ?>
+						<th class="rounded-end"></th>
+						<?php endif; ?>
 					</tr>
 				</thead>
 				<!--end::Table head-->
@@ -58,6 +64,7 @@ include 'header.php';
 								</div>
 							</td>
 
+							<?php if ($_SESSION['role'] === 'admin'): ?>
 							<td class="text-end">
 								
 								<a href="update_kategori.php?id=<?= $data['id_kategori'] ?>" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
@@ -82,6 +89,9 @@ include 'header.php';
 									<!--end::Svg Icon-->
 								</a>
 							</td>
+							<?php else: ?>
+							<td></td>
+							<?php endif; ?>
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

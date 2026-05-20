@@ -2,7 +2,16 @@
 require '../controllers/admin/function.php';
 
 include 'header.php';
-$id = $_GET['id'];
+
+if ($_SESSION['role'] !== 'admin') {
+   echo "<script>
+   alert('Akses ditolak! Halaman ini hanya untuk Administrator.');
+   document.location.href = 'view_laptop.php';
+   </script>";
+   exit();
+}
+
+$id = (int)$_GET['id'];
 
 $data_kategori = select("SELECT * FROM kategori_laptop WHERE id_kategori = $id");
 $kategori = mysqli_fetch_assoc($data_kategori);

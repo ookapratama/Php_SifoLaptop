@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\Apache24\htdocs\sifo-laptop\config.php';
+include __DIR__ . '/../../config.php';
 
 
 function select($query)
@@ -91,14 +91,16 @@ function upload_gambar()
 
 function search($data)
 {
-   // var_dump($data);
-   $merk = $data['merk_laptop'];
-   $prosesor = $data['prosesor'];
-   $ram = $data['ram'];
-   $vga = $data['vga'];
-   $storage = $data['storage'];
-   $harga_awal = $data['harga_awal'];
-   $harga_maks = $data['harga_maks'];
+   $merk = isset($data['merk_laptop']) ? $data['merk_laptop'] : '';
+   $prosesor = isset($data['prosesor']) ? $data['prosesor'] : '';
+   $ram = isset($data['ram']) ? $data['ram'] : '';
+   $vga = isset($data['vga']) ? $data['vga'] : '';
+   $storage = isset($data['storage']) ? $data['storage'] : '';
+   $kategori_laptop = isset($data['kategori_laptop']) ? $data['kategori_laptop'] : '';
+   $screen = isset($data['screen']) ? $data['screen'] : '';
+
+   $harga_awal = isset($data['harga_awal']) ? (float)preg_replace("/[^0-9]/", '', $data['harga_awal']) : 0;
+   $harga_maks = isset($data['harga_maks']) ? (float)preg_replace("/[^0-9]/", '', $data['harga_maks']) : 0;
 
    global $db;
    $query = "SELECT laptop.*, 
@@ -115,16 +117,33 @@ function search($data)
    JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
    JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
    LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
-   WHERE
-   merk_laptop LIKE '%".$merk."%' OR
-   model_laptop LIKE '%".$merk."%' OR
-   ram_laptop LIKE '%".$ram."%' OR
-   prosesor_laptop LIKE '%".$prosesor."%' OR
-   vga_laptop LIKE '%".$vga."%' OR
-   storage_laptop LIKE '%".$storage."%' OR
-   harga_laptop BETWEEN  $harga_awal AND $harga_maks";
+   WHERE 1=1";
+
+   if (!empty($kategori_laptop)) {
+      $query .= " AND kategori_laptop.nama_kategori LIKE '%".mysqli_real_escape_string($db, $kategori_laptop)."%'";
+   }
+   if (!empty($merk)) {
+      $query .= " AND (merk_laptop LIKE '%".mysqli_real_escape_string($db, $merk)."%' OR model_laptop LIKE '%".mysqli_real_escape_string($db, $merk)."%')";
+   }
+   if (!empty($prosesor)) {
+      $query .= " AND prosesor_feature.nama_fitur LIKE '%".mysqli_real_escape_string($db, $prosesor)."%'";
+   }
+   if (!empty($ram)) {
+      $query .= " AND ram_feature.nama_fitur LIKE '%".mysqli_real_escape_string($db, $ram)."%'";
+   }
+   if (!empty($vga)) {
+      $query .= " AND vga_feature.nama_fitur LIKE '%".mysqli_real_escape_string($db, $vga)."%'";
+   }
+   if (!empty($storage)) {
+      $query .= " AND storage_feature.nama_fitur LIKE '%".mysqli_real_escape_string($db, $storage)."%'";
+   }
+   if (!empty($screen)) {
+      $query .= " AND screen_feature.nama_fitur LIKE '%".mysqli_real_escape_string($db, $screen)."%'";
+   }
+   if (!empty($harga_awal) && !empty($harga_maks)) {
+      $query .= " AND harga_laptop BETWEEN $harga_awal AND $harga_maks";
+   }
 
    $search = mysqli_query($db, $query);
-   // var_dump(mysqli_num_rows($search));`
    return $search;
 }

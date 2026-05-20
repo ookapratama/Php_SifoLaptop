@@ -142,89 +142,98 @@ include 'header.php';
 
                <?php
 
-               if (isset($_GET['submit_search'])) {
-                  $kategori_laptop = $_GET['kategori_laptop'];
-                  $merk = $_GET['merk_laptop'];
-                  $prosesor = $_GET['prosesor'];
-                  $ram = $_GET['ram'];
-                  $vga = $_GET['vga'];
-                  $storage = $_GET['storage'];
-                  $screen = $_GET['screen'];
+                if (isset($_GET['submit_search'])) {
+                   $kategori_laptop = mysqli_real_escape_string($db, $_GET['kategori_laptop']);
+                   $merk = mysqli_real_escape_string($db, $_GET['merk_laptop']);
+                   $tujuan = isset($_GET['tujuan']) ? mysqli_real_escape_string($db, $_GET['tujuan']) : '';
+                   $budget_maks = isset($_GET['budget_maks']) ? (float)preg_replace("/[^0-9]/", '', $_GET['budget_maks']) : 0;
 
-                  $harga_awal = (float)preg_replace("/[^0-9]/", '', $_GET['harga_awal']);
-                  $harga_maks = (float)preg_replace("/[^0-9]/", '', $_GET['harga_maks']);
-                  // var_dump($harga_maks );
+                   $min_ram_bobot = 0;
+                   $min_prosesor_bobot = 0;
+                   $min_storage_bobot = 0;
+                   $min_vga_bobot = 0;
 
+                   if ($tujuan == 'office_ringan') {
+                      $min_ram_bobot = 4;
+                      $min_prosesor_bobot = 1;
+                      $min_storage_bobot = 1;
+                      $min_vga_bobot = 1;
+                   } elseif ($tujuan == 'bisnis') {
+                      $min_ram_bobot = 8;
+                      $min_prosesor_bobot = 3;
+                      $min_storage_bobot = 2;
+                      $min_vga_bobot = 1;
+                   } elseif ($tujuan == 'editing') {
+                      $min_ram_bobot = 8;
+                      $min_prosesor_bobot = 5;
+                      $min_storage_bobot = 2;
+                      $min_vga_bobot = 3;
+                   } elseif ($tujuan == 'gaming') {
+                      $min_ram_bobot = 16;
+                      $min_prosesor_bobot = 5;
+                      $min_storage_bobot = 2;
+                      $min_vga_bobot = 4;
+                   } elseif ($tujuan == 'programming') {
+                      $min_ram_bobot = 16;
+                      $min_prosesor_bobot = 7;
+                      $min_storage_bobot = 2;
+                      $min_vga_bobot = 2;
+                   }
 
-                  if ($harga_awal > $harga_maks || $harga_maks < $harga_awal || $harga_awal == '' || $harga_maks == '') {
-                     echo "<script>
-                     alert('Range harga tidak valid');
-                     document.location.href ='index.php';
-                     </script>";
-                     exit();
-                  }
+                   $query = "SELECT
+                   laptop.*,
+                   ram_feature.nama_fitur AS ram,
+                   prosesor_feature.nama_fitur AS prosesor,
+                   storage_feature.nama_fitur AS storage,
+                   vga_feature.nama_fitur AS vga,
+                   screen_feature.nama_fitur AS screen,
+                   kategori_laptop.nama_kategori
+               FROM
+                   laptop
+               JOIN
+                   fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
+               JOIN
+                   fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
+               JOIN
+                   fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
+               JOIN
+                   fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+               JOIN
+                   fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
+               LEFT JOIN
+                   kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
+               WHERE 1 ";
 
-                  $query = "SELECT
-                  laptop.*,
-                  ram_feature.nama_fitur AS ram,
-                  prosesor_feature.nama_fitur AS prosesor,
-                  storage_feature.nama_fitur AS storage,
-                  vga_feature.nama_fitur AS vga,
-                  screen_feature.nama_fitur AS screen,
-                  kategori_laptop.nama_kategori
-              FROM
-                  laptop
-              JOIN
-                  fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
-              JOIN
-                  fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
-              JOIN
-                  fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
-              JOIN
-                  fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-              JOIN
-                  fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
-              LEFT JOIN
-                  kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
-              WHERE 1 ";
-                  if (!empty($kategori_laptop)) {
-                     $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
-                  }
+                   if (!empty($kategori_laptop)) {
+                      $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
+                   }
 
-                  if (!empty($merk)) {
-                     $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
-                  }
+                   if (!empty($merk)) {
+                      $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
+                   }
 
-                  if (!empty($prosesor)) {
-                     $query .= " AND prosesor_feature.nama_fitur LIKE '%$prosesor%'";
-                  }
+                   if ($budget_maks > 0) {
+                      $query .= " AND harga_laptop <= $budget_maks";
+                   }
 
-                  if (!empty($ram)) {
-                     $query .= " AND ram_feature.nama_fitur LIKE '%$ram%'";
-                  }
+                   if ($min_ram_bobot > 0) {
+                      $query .= " AND ram_feature.bobot >= $min_ram_bobot";
+                   }
 
-                  if (!empty($vga)) {
-                     $query .= " AND vga_feature.nama_fitur LIKE '%$vga%'";
-                  }
+                   if ($min_prosesor_bobot > 0) {
+                      $query .= " AND prosesor_feature.bobot >= $min_prosesor_bobot";
+                   }
 
-                  if (!empty($storage)) {
-                     $query .= " AND storage_feature.nama_fitur LIKE '%$storage%'";
-                  }
+                   if ($min_storage_bobot > 0) {
+                      $query .= " AND storage_feature.bobot >= $min_storage_bobot";
+                   }
 
-                  if (!empty($screen)) {
-                     $query .= " AND screen_feature.nama_fitur LIKE '%$screen%'";
-                  }
+                   if ($min_vga_bobot > 0) {
+                      $query .= " AND vga_feature.bobot >= $min_vga_bobot";
+                   }
 
-                  if (!empty($harga_awal) && !empty($harga_maks)) {
-                     $query .= " AND harga_laptop BETWEEN $harga_awal AND $harga_maks";
-                  }
-
-                  $produks = select($query);
-
-                  // var_dump($screen);
-
-                  // var_dump(mysqli_num_rows($produks));
-               } else {
+                   $produks = select($query);
+                } else {
 
                   $produks = select("SELECT laptop.*, 
                      ram_feature.nama_fitur AS ram,
@@ -280,7 +289,7 @@ include 'header.php';
                                  </div>
                                  <!--end::Modal body-->
                                  <div class="d-grid gap-2">
-                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
+                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['storage'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
                                  </div>
                               </div>
                               <!--end::Modal content-->
@@ -1262,6 +1271,14 @@ include 'header.php';
                      </td>
                   </tr>
                   <tr>
+                     <td>Storage </td>
+                     <td>
+                        <span id="storage">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
                      <td>VGA Card </td>
                      <td>
                         <span id="vga">
@@ -1286,13 +1303,14 @@ include 'header.php';
    </div>
 
    <script>
-      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, vga, screen, harga_laptop) {
+      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, storage, vga, screen, harga_laptop) {
          console.log(gambar_laptop);
          document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
          document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
          document.querySelector('#prosesor').innerHTML = prosesor;
-         document.querySelector('#vga').innerHTML = vga;
          document.querySelector('#ram').innerHTML = ram;
+         document.querySelector('#storage').innerHTML = storage;
+         document.querySelector('#vga').innerHTML = vga;
          document.querySelector('#screen').innerHTML = screen;
 
          const formatter = new Intl.NumberFormat('id-ID', {

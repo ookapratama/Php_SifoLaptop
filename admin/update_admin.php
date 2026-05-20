@@ -2,10 +2,10 @@
 require '../controllers/admin/function.php';
 
 include 'header.php';
-// $id = $_GET['id'];
 
-// $data_laptop = select("SELECT * FROM laptop WHERE id_laptop = $id");
-// $laptop = mysqli_fetch_assoc($data_laptop);
+$id_admin = $_SESSION['id_admin'];
+$data_admin = select("SELECT * FROM admin WHERE id = '$id_admin'");
+$admin = mysqli_fetch_assoc($data_admin);
 
  ?>
 
@@ -19,8 +19,7 @@ include 'header.php';
 			<!--begin::Modal body-->
 			<div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 				<!--begin:Form-->
-				<form  class="form" action="proses.php?proses=update&jenis=laptop" method="POST" enctype="multipart/form-data">
-					<!-- <input type="hidden" name="id_laptop" value=""> -->
+				<form  class="form" action="proses.php?proses=update&jenis=admin" method="POST" enctype="multipart/form-data">
 					<!--begin::Heading-->
 					<div class="mb-13 text-center">
 						<!--begin::Title-->
@@ -40,7 +39,7 @@ include 'header.php';
 								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
 							</label>
 							<!--end::Label-->
-							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Nama Anda" name="nama" value="" />
+							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Nama Anda" name="nama" value="<?= htmlspecialchars($admin['nama']) ?>" />
 						</div>
 						<!--end::Input group-->
 						<!--begin::Input group-->
@@ -68,7 +67,7 @@ include 'header.php';
 								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
 							</label>
 							<!--end::Label-->
-							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Username Admin" name="username" value="" />
+							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Username Admin" name="username" value="<?= htmlspecialchars($admin['username']) ?>" />
 						</div>
 						<!--end::Input group-->
 						<!--begin::Input group-->

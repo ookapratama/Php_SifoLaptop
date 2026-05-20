@@ -2,7 +2,16 @@
 require '../controllers/admin/function.php';
 
 include 'header.php';
-$id = $_GET['id'];
+
+if ($_SESSION['role'] !== 'admin') {
+   echo "<script>
+   alert('Akses ditolak! Halaman ini hanya untuk Administrator.');
+   document.location.href = 'view_laptop.php';
+   </script>";
+   exit();
+}
+
+$id = (int)$_GET['id'];
 
 $data_laptop = select("SELECT * FROM laptop WHERE id_laptop = $id");
 $laptop = mysqli_fetch_assoc($data_laptop);
@@ -51,7 +60,7 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 								$data_kategori = select("SELECT * FROM kategori_laptop");
 								while ($data = mysqli_fetch_assoc($data_kategori)) :
 								?>
-									<option value="<?= $data['id_kategori'] ?>" <?php $laptop['kategori_id'] == $data['id_kategori'] ? 'selected' : '' ?> > <?= $data['nama_kategori'] ?></option>
+									<option value="<?= $data['id_kategori'] ?>" <?= $laptop['kategori_id'] == $data['id_kategori'] ? 'selected' : '' ?> > <?= $data['nama_kategori'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -91,7 +100,7 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
 							</label>
 							<!--end::Label-->
-							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Harga Laptop" name="harga_laptop" id="rupiah" value="<?= $laptop['harga_laptop'] ?>" />
+							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Harga Laptop" name="harga_laptop" id="rupiah" value="Rp. <?= number_format($laptop['harga_laptop'], 0, ',', '.') ?>" />
 
 						</div>
 						<!--end::Input group-->
@@ -116,7 +125,7 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 								$data_prosesor = select("SELECT * FROM fitur_laptop WHERE jenis_fitur = 'Processor'");
 								while ($data = mysqli_fetch_assoc($data_prosesor)) :
 								?>
-									<option value="<?= $data['id_fitur'] ?>"><?= $data['nama_fitur'] ?></option>
+									<option value="<?= $data['id_fitur'] ?>" <?= $laptop['prosesor_laptop'] == $data['id_fitur'] ? 'selected' : '' ?>><?= $data['nama_fitur'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -130,7 +139,7 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 								$data_ram = select("SELECT * FROM fitur_laptop WHERE jenis_fitur = 'RAM'");
 								while ($data = mysqli_fetch_assoc($data_ram)) :
 								?>
-									<option value="<?= $data['id_fitur'] ?>"><?= $data['nama_fitur'] ?></option>
+									<option value="<?= $data['id_fitur'] ?>" <?= $laptop['ram_laptop'] == $data['id_fitur'] ? 'selected' : '' ?>><?= $data['nama_fitur'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -144,12 +153,12 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 						<div class="col-md-6 fv-row">
 							<label class="required fs-6 fw-semibold mb-2">Storage Laptop</label>
 							<select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Storage" name="storage_laptop">
-								<option value="" selected disabled>Select storage...</option>
+								<option value="" disabled>Select storage...</option>
 								<?php
 								$data_storage = select("SELECT * FROM fitur_laptop WHERE jenis_fitur = 'Storage'");
 								while ($data = mysqli_fetch_assoc($data_storage)) :
 								?>
-									<option value="<?= $data['id_fitur'] ?>"><?= $data['nama_fitur'] ?></option>
+									<option value="<?= $data['id_fitur'] ?>" <?= $laptop['storage_laptop'] == $data['id_fitur'] ? 'selected' : '' ?>><?= $data['nama_fitur'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -158,12 +167,12 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 						<div class="col-md-6 fv-row">
 							<label class="required fs-6 fw-semibold mb-2">Graphic Card Laptop</label>
 							<select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Graphic Card" name="vga_laptop">
-								<option value="" selected disabled>Select graphic card...</option>
+								<option value="" disabled>Select graphic card...</option>
 								<?php
 								$data_vga = select("SELECT * FROM fitur_laptop WHERE jenis_fitur = 'VGA'");
 								while ($data = mysqli_fetch_assoc($data_vga)) :
 								?>
-									<option value="<?= $data['id_fitur'] ?>"><?= $data['nama_fitur'] ?></option>
+									<option value="<?= $data['id_fitur'] ?>" <?= $laptop['vga_laptop'] == $data['id_fitur'] ? 'selected' : '' ?>><?= $data['nama_fitur'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>
@@ -177,12 +186,12 @@ $laptop = mysqli_fetch_assoc($data_laptop);
 						<div class="col-md-6 fv-row">
 							<label class="required fs-6 fw-semibold mb-2">Screen Laptop</label>
 							<select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Screen" name="screen_laptop">
-								<option value="" selected disabled>Select screen...</option>
+								<option value="" disabled>Select screen...</option>
 								<?php
 								$data_storage = select("SELECT * FROM fitur_laptop WHERE jenis_fitur = 'Screen'");
 								while ($data = mysqli_fetch_assoc($data_storage)) :
 								?>
-									<option value="<?= $data['id_fitur'] ?>"><?= $data['nama_fitur'] ?></option>
+									<option value="<?= $data['id_fitur'] ?>" <?= $laptop['screen_laptop'] == $data['id_fitur'] ? 'selected' : '' ?>><?= $data['nama_fitur'] ?></option>
 								<?php endwhile; ?>
 							</select>
 						</div>

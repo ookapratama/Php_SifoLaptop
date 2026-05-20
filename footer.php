@@ -16,7 +16,6 @@
 <!--end::Custom Javascript-->
 <script src="assets/js/custom/pages/pricing/general.js"></script>
 <!--end::Javascript-->
-<script src="assets/js/wizard.js"></script>
 </body>
 <!--end::Body-->
 

@@ -15,6 +15,7 @@ include 'header.php';
 		<h3 class="card-title align-items-start flex-column">
 			<span class="card-label fw-bold fs-3 mb-1">New Arrivals</span>
 		</h3>
+		<?php if ($_SESSION['role'] === 'admin'): ?>
 		<div class="card-toolbar">
 			<a href="tambah_laptop.php" class="btn btn-sm btn-light-primary" >
 				<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
@@ -26,6 +27,7 @@ include 'header.php';
 				</span>
 				<!--end::Svg Icon-->Tambah Laptop</a>
 		</div>
+		<?php endif; ?>
 	</div>
 	<!--end::Header-->
 	<!--begin::Body-->
@@ -41,7 +43,11 @@ include 'header.php';
 						<th class="min-w-125px">Serial Number</th>
 						<th class="min-w-125px">Harga</th>
 						<th class="min-w-250px">Spesifikasi</th>
+						<?php if ($_SESSION['role'] === 'admin'): ?>
 						<th class="min-w-150px text-end rounded-end"></th>
+						<?php else: ?>
+						<th class="rounded-end"></th>
+						<?php endif; ?>
 					</tr>
 				</thead>
 				<!--end::Table head-->
@@ -93,6 +99,7 @@ include 'header.php';
 								<span class="text-muted fw-semibold text-muted d-block fs-7"> Screen Size : <?= $data['screen'] ?></span>
 							</td>
 
+							<?php if ($_SESSION['role'] === 'admin'): ?>
 							<td class="text-end">
 								
 								<a href="update_laptop.php?id=<?= $data['id_laptop'] ?>" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
@@ -117,6 +124,9 @@ include 'header.php';
 									<!--end::Svg Icon-->
 								</a>
 							</td>
+							<?php else: ?>
+							<td></td>
+							<?php endif; ?>
 						</tr>
 					<?php endwhile; ?>
 				</tbody>

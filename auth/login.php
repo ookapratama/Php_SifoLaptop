@@ -6,16 +6,18 @@ if (isset($_POST['login'])) {
 
    $result = login($_POST);
 
-   // var_dump($result);
-   if ($result > 0) {
+   if ($result) {
       session_start();
 
-      $_SESSION['username'] = 'Administrator';
+      $_SESSION['username'] = $result['username'];
+      $_SESSION['nama'] = $result['nama'];
+      $_SESSION['id_admin'] = $result['id'];
+      $_SESSION['role'] = $result['role'];
       $_SESSION['login'] = true;
-      // var_dump($_SESSION);
       header("Location: ../admin/index.php");
+      exit;
    } else {
-      var_dump(false);
+      $error = "Username atau Password salah!";
    }
 }
 
@@ -98,9 +100,9 @@ License: For each use you must have a valid license purchased only from above li
          <!--begin::Aside-->
          <div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
             <!--begin::Aside-->
-            <div class="d-flex flex-center flex-lg-start flex-column">
+             <div class="d-flex flex-center flex-lg-start flex-column">
                <!--begin::Logo-->
-               <a href="../../demo1/dist/index.html" class="mb-7">
+               <a href="../index.php" class="mb-7">
                   <img alt="Logo" src="../assets/img/brand.png" />
                </a>
                <!--end::Logo-->
@@ -126,10 +128,18 @@ License: For each use you must have a valid license purchased only from above li
                         <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
                         <!--end::Title-->
                         <!--begin::Subtitle-->
-                        <div class="text-gray-500 fw-semibold fs-6">Your Social Campaigns</div>
+                        <div class="text-gray-500 fw-semibold fs-6">SIFO Laptop Management Portal</div>
                         <!--end::Subtitle=-->
                      </div>
                      <!--begin::Heading-->
+                     
+                     <?php if (isset($error)): ?>
+                     <div class="alert alert-danger d-flex align-items-center p-4 mb-8">
+                        <div class="d-flex flex-column">
+                           <span class="text-danger fw-semibold"><?= $error ?></span>
+                        </div>
+                     </div>
+                     <?php endif; ?>
 
                      <!--begin::Input group=-->
                      <div class="fv-row mb-8">

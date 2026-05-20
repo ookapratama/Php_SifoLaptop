@@ -1,7 +1,15 @@
 <?php
 require '../controllers/admin/function.php';
 
-include 'header.php'
+include 'header.php';
+
+if ($_SESSION['role'] !== 'admin') {
+   echo "<script>
+   alert('Akses ditolak! Halaman ini hanya untuk Administrator.');
+   document.location.href = 'view_laptop.php';
+   </script>";
+   exit();
+}
  ?>
 
 <!--begin::Modal - New Target-->

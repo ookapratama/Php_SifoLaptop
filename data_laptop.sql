@@ -26,7 +26,8 @@ CREATE TABLE `admin` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nama` varchar(50) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +38,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES (1,'Administrator','admin','admin');
+INSERT INTO `admin` VALUES (1,'Administrator','admin','$2y$10$rIH6xZDdBd63El3RDNsxMe.qCu9ly8x6CWBbbZoSNUhAEH8cuOFha','admin'),(2,'Regular User','user','$2y$10$m3Afu8NKjUpuXgUunO9MtO6nQqNmzFLcmG7YXBK4OZMVmb4PqUPve','nonadmin');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,6 +53,7 @@ CREATE TABLE `fitur_laptop` (
   `id_fitur` int NOT NULL AUTO_INCREMENT,
   `jenis_fitur` varchar(50) NOT NULL,
   `nama_fitur` varchar(150) DEFAULT NULL,
+  `bobot` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_fitur`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -62,7 +64,59 @@ CREATE TABLE `fitur_laptop` (
 
 LOCK TABLES `fitur_laptop` WRITE;
 /*!40000 ALTER TABLE `fitur_laptop` DISABLE KEYS */;
-INSERT INTO `fitur_laptop` VALUES (1,'RAM','8GB RAM'),(5,'Screen','14 Inchi'),(9,'RAM','16GB RAM'),(12,'RAM','4GB RAM'),(13,'Screen','12 Inchi'),(14,'Screen','10 Inchi'),(15,'Processor','Intel Celeron N4020 Processor (1.1GHz Up to 2.8GHz, 4M Cache)'),(16,'VGA','Intel® UHD Graphics'),(17,'Storage','256GB SSD'),(18,'RAM','24GB RAM'),(19,'RAM','2GB RAM'),(20,'RAM','32GB RAM'),(21,'Processor','Intel® Core™ i3-1115G4 Processor 3.0 GHz (6M Cache, up to 4.1 GHz, 2 cores)'),(22,'Processor','AMD Ryzen 3-3250U Processor (2.6GHz Up to 3.5GHz, 4MB Cache)'),(23,'Processor','AMD Ryzen™ 5 5600H'),(24,'Processor','AMD Ryzen™ 7-5800H Processor (8-core/16-thread, 20MB cache'),(25,'Processor','Intel® Core™ i3-1215U Processor (up to 4.4 GHz with Intel® Turbo Boost Technology'),(26,'Processor','AMD Ryzen™ 3-7320U Processor ((4-core/8-thread, 4MB cache'),(27,'Processor','	 Intel® Core™ i7-1215G4 Processor 3.0 GHz (6M Cache, up to 4.1 GHz, 2 cores)'),(28,'Storage','512GB HDD'),(29,'Storage','128GB SSD'),(30,'Storage','512GB SSD'),(31,'Storage','512GB SSD'),(32,'Storage','1TB SSD'),(33,'Storage','128GB HDD'),(34,'Storage','128GB HDD'),(35,'Storage','256GB HDD'),(36,'Storage','1TB HDD'),(37,'VGA','Intel Iris Xe Graphics'),(38,'VGA','Intel HD Graphics'),(39,'VGA','Intel Iris Plus Graphics'),(40,'VGA','Intel Xe MAX Graphics'),(41,'VGA','NVIDIA GeForce RTX 3080 Series'),(42,'VGA','NVIDIA GeForce GTX 1660 Series'),(43,'VGA','NVIDIA GeForce RTX 2080 Series'),(44,'VGA','NVIDIA GeForce GTX 1080 Series'),(45,'VGA','NVIDIA GeForce MX450 Series'),(46,'VGA','AMD Radeon RX 6000 Series '),(47,'VGA','AMD Radeon RX 5700 Series'),(48,'VGA','AMD Radeon RX 570 Series'),(49,'VGA','AMD Radeon Vega 10 Series'),(50,'VGA','AMD Radeon R7 M445 Series'),(51,'Screen','11,6 Inchi'),(52,'Screen','12,3 Inchi'),(53,'Screen','13,3 Inchi'),(54,'Screen','15,6 Inchi'),(55,'Processor','Intel® Core i5-1135G7 Processor (4C/8T, 2.4GHz Up to 4.2GHz, 8MB Cache)'),(56,'Processor','Intel Core i7-1165G7'),(57,'Processor','Apple M1 Chip'),(58,'Processor','Intel Core i5-10210U'),(59,'VGA','GPU terintegrasi (Apple M1)'),(60,'VGA','AMD Radeon Graphics');
+INSERT INTO `fitur_laptop` VALUES 
+(1,'RAM','8GB RAM',8),
+(5,'Screen','14 Inchi',14),
+(9,'RAM','16GB RAM',16),
+(12,'RAM','4GB RAM',4),
+(13,'Screen','12 Inchi',12),
+(14,'Screen','10 Inchi',10),
+(15,'Processor','Intel Celeron N4020 Processor (1.1GHz Up to 2.8GHz, 4M Cache)',1),
+(16,'VGA','Intel® UHD Graphics',1),
+(17,'Storage','256GB SSD',2),
+(18,'RAM','24GB RAM',24),
+(19,'RAM','2GB RAM',2),
+(20,'RAM','32GB RAM',32),
+(21,'Processor','Intel® Core™ i3-1115G4 Processor 3.0 GHz (6M Cache, up to 4.1 GHz, 2 cores)',3),
+(22,'Processor','AMD Ryzen 3-3250U Processor (2.6GHz Up to 3.5GHz, 4MB Cache)',3),
+(23,'Processor','AMD Ryzen™ 5 5600H',5),
+(24,'Processor','AMD Ryzen™ 7-5800H Processor (8-core/16-thread, 20MB cache',7),
+(25,'Processor','Intel® Core™ i3-1215U Processor (up to 4.4 GHz with Intel® Turbo Boost Technology',3),
+(26,'Processor','AMD Ryzen™ 3-7320U Processor ((4-core/8-thread, 4MB cache',3),
+(27,'Processor','	 Intel® Core™ i7-1215G4 Processor 3.0 GHz (6M Cache, up to 4.1 GHz, 2 cores)',7),
+(28,'Storage','512GB HDD',1),
+(29,'Storage','128GB SSD',2),
+(30,'Storage','512GB SSD',2),
+(31,'Storage','512GB SSD',2),
+(32,'Storage','1TB SSD',2),
+(33,'Storage','128GB HDD',1),
+(34,'Storage','128GB HDD',1),
+(35,'Storage','256GB HDD',1),
+(36,'Storage','1TB HDD',1),
+(37,'VGA','Intel Iris Xe Graphics',1),
+(38,'VGA','Intel HD Graphics',1),
+(39,'VGA','Intel Iris Plus Graphics',1),
+(40,'VGA','Intel Xe MAX Graphics',2),
+(41,'VGA','NVIDIA GeForce RTX 3080 Series',5),
+(42,'VGA','NVIDIA GeForce GTX 1660 Series',3),
+(43,'VGA','NVIDIA GeForce RTX 2080 Series',5),
+(44,'VGA','NVIDIA GeForce GTX 1080 Series',3),
+(45,'VGA','NVIDIA GeForce MX450 Series',2),
+(46,'VGA','AMD Radeon RX 6000 Series ',4),
+(47,'VGA','AMD Radeon RX 5700 Series',4),
+(48,'VGA','AMD Radeon RX 570 Series',3),
+(49,'VGA','AMD Radeon Vega 10 Series',2),
+(50,'VGA','AMD Radeon R7 M445 Series',2),
+(51,'Screen','11,6 Inchi',11),
+(52,'Screen','12,3 Inchi',12),
+(53,'Screen','13,3 Inchi',13),
+(54,'Screen','15,6 Inchi',15),
+(55,'Processor','Intel® Core i5-1135G7 Processor (4C/8T, 2.4GHz Up to 4.2GHz, 8MB Cache)',5),
+(56,'Processor','Intel Core i7-1165G7',7),
+(57,'Processor','Apple M1 Chip',8),
+(58,'Processor','Intel Core i5-10210U',5),
+(59,'VGA','GPU terintegrasi (Apple M1)',2),
+(60,'VGA','AMD Radeon Graphics',1);
 /*!40000 ALTER TABLE `fitur_laptop` ENABLE KEYS */;
 UNLOCK TABLES;
 

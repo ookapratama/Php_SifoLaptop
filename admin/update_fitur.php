@@ -3,7 +3,15 @@ require '../controllers/admin/function.php';
 
 include 'header.php';
 
-$id = $_GET['id'];
+if ($_SESSION['role'] !== 'admin') {
+   echo "<script>
+   alert('Akses ditolak! Halaman ini hanya untuk Administrator.');
+   document.location.href = 'view_laptop.php';
+   </script>";
+   exit();
+}
+
+$id = (int)$_GET['id'];
 
 $data_fitur = select("SELECT * FROM fitur_laptop WHERE id_fitur = $id");
 $fitur = mysqli_fetch_assoc($data_fitur);
@@ -24,7 +32,7 @@ $fitur = mysqli_fetch_assoc($data_fitur);
 					<input type="hidden" name="id" value="<?= $fitur['id_fitur'] ?>">
 					<div class="mb-13 text-center">
 						<!--begin::Title-->
-						<h1 class="mb-3 mt-5">Update Kategori</h1>
+						<h1 class="mb-3 mt-5">Update Fitur</h1>
 						<!--end::Title-->
 
 					</div>
@@ -32,7 +40,7 @@ $fitur = mysqli_fetch_assoc($data_fitur);
 					<!--begin::Input group-->
 					<div class="row g-9 mb-8">
 						<!--begin::Col-->
-						<div class="col-md-6 fv-row">
+						<div class="col-md-4 fv-row">
 							<label class="required fs-6 fw-semibold mb-2">Jenis Fitur</label>
 							<select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Jenis Fitur" name="jenis_fitur">
 								<option value="" disabled selected>Select kategori...</option>
@@ -44,17 +52,26 @@ $fitur = mysqli_fetch_assoc($data_fitur);
 							</select>
 						</div>
 						<!--end::Col-->
-						<!--begin::Input group-->
-						<div class="col-md-6 fv-row">
+						<!--begin::Col-->
+						<div class="col-md-4 fv-row">
 							<!--begin::Label-->
 							<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
 								<span class="required">Nama Fitur</span>
-								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a target name for future usage and reference"></i>
 							</label>
 							<!--end::Label-->
 							<input required type="text" class="form-control form-control-solid" placeholder="Masukkan Nama Fitur" name="nama_fitur" value="<?= $fitur['nama_fitur'] ?>" />
 						</div>
-						<!--end::Input group-->
+						<!--end::Col-->
+						<!--begin::Col-->
+						<div class="col-md-4 fv-row">
+							<!--begin::Label-->
+							<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+								<span class="required">Bobot Fitur</span>
+							</label>
+							<!--end::Label-->
+							<input required type="number" min="0" class="form-control form-control-solid" placeholder="Masukkan Bobot Fitur (Angka)" name="bobot" value="<?= $fitur['bobot'] ?>" />
+						</div>
+						<!--end::Col-->
 					</div>
 					<!--end::Input group-->
 					

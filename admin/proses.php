@@ -1,13 +1,24 @@
 <?php
+session_start();
+if (empty($_SESSION['login'])) {
+   header("Location: ../auth/login.php");
+   exit();
+}
 include '../controllers/admin/function.php';
 
 $proses = $_GET['proses'];
 $jenis = $_GET['jenis'];
 
-if ($proses == 'store') {
-   // var_dump($_POST);
-   if ($jenis == 'laptop') {
+if ($_SESSION['role'] !== 'admin' && $jenis !== 'admin') {
+   echo "<script>
+   alert('Akses ditolak! Akun Anda tidak memiliki izin untuk melakukan aksi ini.');
+   history.back();
+   </script>";
+   exit();
+}
 
+if ($proses == 'store') {
+   if ($jenis == 'laptop') {
       $merk_laptop = $_POST['merk_laptop'];
       $kategori_id = $_POST['kategori_laptop'];
       $no_serial = $_POST['no_serial'];
@@ -19,16 +30,14 @@ if ($proses == 'store') {
       $storage_laptop = $_POST['storage_laptop'];
       $screen_laptop = $_POST['screen_laptop'];
       
-      // $tes = "Rp. 5.100.000";
       $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
-      // echo $harga;
-
       $uniq_name = upload_gambar();
-      // var_dump($uniq_name);
-      $data_query = "(null, '$kategori_id', '$merk_laptop', '$no_serial', '$harga', '$ram_laptop', '$prosesor_laptop', '$storage_laptop', '$vga_laptop', '$screen_laptop', '$uniq_name', '$model_laptop')";
-      
-      $data_laptop = store("laptop", $data_query);
-      // var_dump($data_laptop);
+
+      $stmt = $db->prepare("INSERT INTO laptop (kategori_id, merk_laptop, no_serial, harga_laptop, ram_laptop, prosesor_laptop, storage_laptop, vga_laptop, screen_laptop, gambar_laptop, model_laptop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("issiiiiisss", $kategori_id, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop);
+      $stmt->execute();
+      $data_laptop = $stmt->affected_rows;
+      $stmt->close();
 
       if ($data_laptop > 0) {
          echo "<script>
@@ -37,12 +46,13 @@ if ($proses == 'store') {
       }
 
    } else if ($jenis == 'kategori') {
-
       $nama_kategori = $_POST['kategori_laptop'];
 
-      $data_query = "(null, '$nama_kategori')";
-      // var_dump($data_query);
-      $data_laptop = store('kategori_laptop', $data_query);
+      $stmt = $db->prepare("INSERT INTO kategori_laptop (nama_kategori) VALUES (?)");
+      $stmt->bind_param("s", $nama_kategori);
+      $stmt->execute();
+      $data_laptop = $stmt->affected_rows;
+      $stmt->close();
 
       if ($data_laptop > 0) {
          echo "<script>
@@ -51,22 +61,23 @@ if ($proses == 'store') {
       }
    }
    else {
-      // var_dump($_POST);
       $jenis_fitur = $_POST['jenis_fitur'];
       $nama_fitur = $_POST['nama_fitur'];
+      $bobot = isset($_POST['bobot']) ? (int)$_POST['bobot'] : 0;
 
-      $data_query = "(null, '$jenis_fitur', '$nama_fitur')";
-      $data_fitur = store('fitur_laptop', $data_query);
+      $stmt = $db->prepare("INSERT INTO fitur_laptop (jenis_fitur, nama_fitur, bobot) VALUES (?, ?, ?)");
+      $stmt->bind_param("ssi", $jenis_fitur, $nama_fitur, $bobot);
+      $stmt->execute();
+      $data_fitur = $stmt->affected_rows;
+      $stmt->close();
 
       if ($data_fitur > 0) {
-         
          echo "<script>
          document.location.href ='view_fitur.php?jenis_fitur=$jenis_fitur';
          </script>";
       }
    }
 } else {
-   // var_dump($_POST);
    if ($jenis == 'laptop') {
       $id_laptop = $_POST['id_laptop'];
       $merk_laptop = $_POST['merk_laptop'];
@@ -79,7 +90,6 @@ if ($proses == 'store') {
       $storage_laptop = $_POST['storage_laptop'];
       $vga_laptop = $_POST['vga_laptop'];
       $screen_laptop = $_POST['screen_laptop'];
-      $model_laptop = $_POST['model_laptop'];
       $gambar_lama = $_POST['gambar_lama'];
 
       $error = $_FILES['gambar_laptop']['error'];
@@ -91,48 +101,98 @@ if ($proses == 'store') {
 
       $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
 
-      $data_query = "kategori_id = '$kategori_laptop', merk_laptop = '$merk_laptop', no_serial = '$no_serial', harga_laptop = '$harga', ram_laptop = '$ram_laptop', prosesor_laptop = '$prosesor_laptop', storage_laptop = '$storage_laptop', vga_laptop = '$vga_laptop', screen_laptop = '$screen_laptop', gambar_laptop = '$uniq_name', model_laptop = '$model_laptop' WHERE id_laptop = '$id_laptop'";
+      $stmt = $db->prepare("UPDATE laptop SET kategori_id = ?, merk_laptop = ?, no_serial = ?, harga_laptop = ?, ram_laptop = ?, prosesor_laptop = ?, storage_laptop = ?, vga_laptop = ?, screen_laptop = ?, gambar_laptop = ?, model_laptop = ? WHERE id_laptop = ?");
+      $stmt->bind_param("issiiiiisssi", $kategori_laptop, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop, $id_laptop);
+      $stmt->execute();
+      $data_laptop = $stmt->affected_rows;
+      $stmt->close();
 
-      $data_laptop = update('laptop', $data_query);
-
-      if ($data_laptop > 0) {
+      if ($data_laptop >= 0) {
          echo "<script>
-      document.location.href ='view_laptop.php';
-      </script>";
+         document.location.href ='view_laptop.php';
+         </script>";
       }
    }
    else if ($jenis == 'kategori') {
       $id_kategori = $_POST['id'];
       $nama_kategori = $_POST['kategori_laptop'];
 
-      $data_query = "nama_kategori = '$nama_kategori' WHERE id_kategori = '$id_kategori'";
-      // var_dump($data_query);
-      $data_kategori = update('kategori_laptop', $data_query);
+      $stmt = $db->prepare("UPDATE kategori_laptop SET nama_kategori = ? WHERE id_kategori = ?");
+      $stmt->bind_param("si", $nama_kategori, $id_kategori);
+      $stmt->execute();
+      $data_kategori = $stmt->affected_rows;
+      $stmt->close();
 
-      if ($data_kategori > 0) {
+      if ($data_kategori >= 0) {
          echo "<script>
          document.location.href ='view_kategori.php';
          </script>";
       }
    }
    else if ($jenis == 'fitur') {
-      
       $id_fitur = $_POST['id'];
       $jenis_fitur = $_POST['jenis_fitur'];
       $nama_fitur = $_POST['nama_fitur'];
+      $bobot = isset($_POST['bobot']) ? (int)$_POST['bobot'] : 0;
 
-      $data_query = "jenis_fitur = '$jenis_fitur', nama_fitur = '$nama_fitur' WHERE id_fitur = $id_fitur";
-
-      $data_fitur = update('fitur_laptop', $data_query);
+      $stmt = $db->prepare("UPDATE fitur_laptop SET jenis_fitur = ?, nama_fitur = ?, bobot = ? WHERE id_fitur = ?");
+      $stmt->bind_param("ssii", $jenis_fitur, $nama_fitur, $bobot, $id_fitur);
+      $stmt->execute();
+      $data_fitur = $stmt->affected_rows;
+      $stmt->close();
       
-      if ($data_fitur > 0) {
+      if ($data_fitur >= 0) {
          echo "<script>
          document.location.href ='view_fitur.php?jenis_fitur=$jenis_fitur';
          </script>";
       }
    }
+   else if ($jenis == 'admin') {
+      $id_admin = $_SESSION['id_admin'];
+      $nama = $_POST['nama'];
+      $username = $_POST['username'];
+      $pass_lama = $_POST['pass_lama'];
+      $pass_baru = $_POST['pass_baru'];
 
-   else {
-      
+      $stmt = $db->prepare("SELECT * FROM admin WHERE id = ?");
+      $stmt->bind_param("i", $id_admin);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $admin = $result->fetch_assoc();
+      $stmt->close();
+
+      if ($admin && password_verify($pass_lama, $admin['password'])) {
+         if (!empty($pass_baru)) {
+            $hashed_pass = password_hash($pass_baru, PASSWORD_DEFAULT);
+            $stmt = $db->prepare("UPDATE admin SET nama = ?, username = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $nama, $username, $hashed_pass, $id_admin);
+         } else {
+            $stmt = $db->prepare("UPDATE admin SET nama = ?, username = ? WHERE id = ?");
+            $stmt->bind_param("ssi", $nama, $username, $id_admin);
+         }
+
+         $stmt->execute();
+         $data_update = $stmt->affected_rows;
+         $stmt->close();
+         
+         if ($data_update >= 0) {
+            $_SESSION['username'] = $username;
+            $_SESSION['nama'] = $nama;
+            echo "<script>
+            alert('Profil admin berhasil diubah!');
+            document.location.href ='update_admin.php';
+            </script>";
+         } else {
+            echo "<script>
+            alert('Gagal mengubah profil admin!');
+            history.back();
+            </script>";
+         }
+      } else {
+         echo "<script>
+         alert('Password Lama salah!');
+         history.back();
+         </script>";
+      }
    }
 }

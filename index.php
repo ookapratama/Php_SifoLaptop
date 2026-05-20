@@ -310,7 +310,7 @@ include 'header.php';
                               </div>
                               <!--end::Modal body-->
                               <div class="d-grid gap-2">
-                                 <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
+                                 <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['storage'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
                               </div>
                            </div>
                            <!--end::Modal content-->
@@ -1267,6 +1267,14 @@ include 'header.php';
                      </td>
                   </tr>
                   <tr>
+                     <td>Storage </td>
+                     <td>
+                        <span id="storage">
+                           Pending
+                        </span>
+                     </td>
+                  </tr>
+                  <tr>
                      <td>VGA Card </td>
                      <td>
                         <span id="vga">
@@ -1374,14 +1382,14 @@ include 'header.php';
                         <div class="col-md-6">
                            <!--begin::Col-->
 
-                           <label class=" fs-6 fw-semibold mb-2">Kateogri Laptop</label>
+                           <label class=" fs-6 fw-semibold mb-2">Kategori Laptop</label>
                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="kategori_laptop">
                               <option value="">-- Pilih --</option>
                               <?php
                               $result = select("SELECT * FROM kategori_laptop");
                               while ($data = mysqli_fetch_assoc($result)) :
                               ?>
-                                 <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
+                                  <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
                               <?php endwhile; ?>
                            </select>
                            <!--end::Col-->
@@ -1405,98 +1413,26 @@ include 'header.php';
                         <div class="col-md-6">
                            <!--begin::Col-->
 
-                           <label class=" fs-6 fw-semibold mb-2">Processor Laptop</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="prosesor">
-                              <option value="" selected>-- Pilih --</option>
-                              <option value="Intel">Intel</option>
-                              <option value="AMD">AMD</option>
+                           <label class="required fs-6 fw-semibold mb-2">Tujuan Penggunaan</label>
+                           <select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="tujuan">
+                              <option value="" disabled selected>-- Pilih --</option>
+                              <option value="office_ringan">Belajar / Office Ringan</option>
+                              <option value="bisnis">Bisnis / Kerja Produktif</option>
+                              <option value="editing">Desain Grafis / Editing Video</option>
+                              <option value="gaming">Gaming Berat / Render 3D</option>
+                              <option value="programming">Programming / Developer</option>
                            </select>
                            <!--end::Col-->
                         </div>
                         <!--end::Col-->
                         <!--begin::Col-->
                         <div class="col-md-6 fv-row">
-                           <label class="required fs-6 fw-semibold mb-2">Memory RAM</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="ram">
-                              <option value="" selected>-- Pilih --</option>
-                              <option value="1">1 GB RAM</option>
-                              <option value="2">2 GB RAM</option>
-                              <option value="4">4 GB RAM</option>
-                              <option value="8">8 GB RAM</option>
-                              <option value="16">16 GB RAM</option>
-                              <option value="20">20 GB RAM</option>
-                              <option value="24">24 GB RAM</option>
-                           </select>
+                           <label class="required fs-6 fw-semibold mb-2">Budget Maksimal</label>
+                           <input required type="text" class="form-control form-control-solid" placeholder="Rp. 10.000.000" name="budget_maks" value="Rp. 10.000.000" id="rupiah" />
                         </div>
                         <!--end::Col-->
                      </div>
                      <!--end::Input group-->
-
-                     <!--begin::Input group-->
-                     <div class="row g-9 mb-8">
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                           <!--begin::Col-->
-
-                           <label class=" fs-6 fw-semibold mb-2">VGA Laptop</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="vga">
-                              <option value="" selected>-- Pilih --</option>
-                              <option value="Intel">Intel</option>
-                              <option value="AMD">AMD</option>
-                              <option value="Nvidia">Nvidia</option>
-                           </select>
-                           <!--end::Col-->
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-3 fv-row">
-                           <label class="required fs-6 fw-semibold mb-2">Storage</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="storage">
-                              <option value="" selected>-- Pilih --</option>
-                              <option value="hdd">HDD</option>
-                              <option value="ssd">SSD</option>
-                           </select>
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-3 fv-row">
-                           <label class="required fs-6 fw-semibold mb-2">Screen Size</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="screen">
-                              <option value="">-- Pilih --</option>
-                              <?php
-                              $result = select("SELECT DISTINCT screen_feature.nama_fitur AS screen FROM laptop JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur");
-                              while ($data = mysqli_fetch_assoc($result)) :
-                              ?>
-                                 <option value="<?= $data['screen'] ?>"><?= $data['screen'] ?></option>
-                              <?php endwhile; ?>
-                           </select>
-                           <!--end::Col-->
-                        </div>
-                        <!--end::Col-->
-
-                     </div>
-                     <!--end::Input group-->
-                     <!--begin::Input group-->
-                     <div class="row g-9 mb-8">
-                        <!--begin::Col-->
-                        <!--begin::Label-->
-                        <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
-                           <span class="">Range Harga</span>
-                        </label>
-                        <!--end::Label-->
-                        <div class="col-md-6 fv-row">
-                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 1.000.000" name="harga_awal" value="Rp. 1.000.000" id="rupiah" />
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6 fv-row">
-                           <input type="text" class="form-control form-control-solid" placeholder="Rp. 100.000.000" name="harga_maks" value="Rp. 10.000.000" id="rupiah1" />
-                        </div>
-                        <!--end::Col-->
-
-                     </div>
-                     <!--end::Input group-->
-                     <!-- end step 2 -->
 
                      <!--begin::Actions-->
                      <div class="f1-buttons">
@@ -1523,14 +1459,15 @@ include 'header.php';
 
    <!-- passing data per produk ke modal -->
    <script>
-      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, vga, screen, harga_laptop) {
+      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, storage, vga, screen, harga_laptop) {
          console.log(gambar_laptop);
          document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
          document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
-         document.querySelector('#prosesor').innerHTML = "Processor : " + prosesor;
-         document.querySelector('#vga').innerHTML = "VGA Card : " + vga;
-         document.querySelector('#ram').innerHTML = "Memory RAM : " + ram;
-         document.querySelector('#screen').innerHTML = "Screen Size : " + screen;
+         document.querySelector('#prosesor').innerHTML = prosesor;
+         document.querySelector('#ram').innerHTML = ram;
+         document.querySelector('#storage').innerHTML = storage;
+         document.querySelector('#vga').innerHTML = vga;
+         document.querySelector('#screen').innerHTML = screen;
 
          const formatter = new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -1571,31 +1508,7 @@ include 'header.php';
       }
    </script>
    <!-- end::Script ke rupiah -->
-   <!-- start::Script ke rupiah -->
-   <script>
-      var convert_rupiah1 = document.getElementById('rupiah1');
-      convert_rupiah1.addEventListener('keyup', function(e) {
-         convert_rupiah1.value = formatRupiah1(this.value, 'Rp. ');
-      });
 
-      /* Fungsi */
-      function formatRupiah1(angka, prefix) {
-         var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-         if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-         }
-
-         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-         return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-      }
-   </script>
-   <!-- end::Script ke rupiah -->
 
    <!-- Wizard modal search -->
    <script>
@@ -1645,7 +1558,7 @@ include 'header.php';
          });
 
          function validateStep(stepIndex) {
-            const inputs = steps[stepIndex].querySelectorAll("input[required]");
+            const inputs = steps[stepIndex].querySelectorAll("input[required], select[required]");
             let isValid = true;
 
             inputs.forEach((input) => {
