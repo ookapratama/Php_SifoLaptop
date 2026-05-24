@@ -274,6 +274,8 @@ include 'header.php';
                   $query .= " AND has_biometric = 1";
                }
 
+               $query .= " LIMIT 4";
+
                $produks = select($query);
             } else {
                $produks = select("SELECT laptop.*, 
@@ -325,6 +327,67 @@ include 'header.php';
                if (mysqli_num_rows($produks) != 0) {
                   while ($produk = mysqli_fetch_assoc($produks)) :
                      // var_dump($produk);
+                     $reasons_str = "";
+                     if (isset($_GET['submit_search'])) {
+                        $reasons = [];
+                        
+                        // 1. Use Case Reason
+                        if ($tujuan == 'office_ringan') {
+                           $reasons[] = "Cocok untuk Tugas Harian Standar (Browsing/Zoom/Office) dengan prosesor hemat daya dan performa memadai.";
+                        } elseif ($tujuan == 'bisnis') {
+                           $reasons[] = "Sangat baik untuk Produktivitas Kerja & Desain Ringan berkat kombinasi CPU mid-tier dan RAM yang mumpuni.";
+                        } elseif ($tujuan == 'editing') {
+                           $reasons[] = "Direkomendasikan untuk Editing Video & Rendering karena dilengkapi CPU kelas atas dan RAM/GPU performa tinggi.";
+                        } elseif ($tujuan == 'gaming') {
+                           $reasons[] = "Sangat direkomendasikan untuk Gaming Intensif dengan spesifikasi CPU performa tinggi dan GPU Dedicated tangguh.";
+                        }
+
+                        // 2. Mobility Reason
+                        if ($mobilitas == 'sangat_sering') {
+                           $reasons[] = "Memiliki mobilitas tinggi karena sangat ringan (" . $produk['berat_laptop'] . " kg) dan layar ringkas (" . $produk['screen'] . ").";
+                        } elseif ($mobilitas == 'kadang') {
+                           $reasons[] = "Bobot seimbang (" . $produk['berat_laptop'] . " kg) dengan layar " . $produk['screen'] . ", pas untuk penggunaan fleksibel.";
+                        } elseif ($mobilitas == 'jarang') {
+                           $reasons[] = "Ukuran layar besar (" . $produk['screen'] . ") memberikan kenyamanan optimal saat bekerja di meja.";
+                        }
+
+                        // 3. Battery Reason
+                        if ($baterai == 'terbatas' && $produk['baterai_laptop'] >= 55) {
+                           $reasons[] = "Kapasitas baterai besar (" . $produk['baterai_laptop'] . " WHr) mendukung daya tahan lama untuk penggunaan outdoor.";
+                        } elseif ($produk['baterai_laptop']) {
+                           $reasons[] = "Kapasitas baterai " . $produk['baterai_laptop'] . " WHr mencukupi untuk produktivitas harian Anda.";
+                        }
+
+                        // 4. Budget Reason
+                        $harga_formatted = number_format($produk['harga_laptop'], 0, ',', '.');
+                        if ($budget_range == 'under_5' && $produk['harga_laptop'] <= 5000000) {
+                           $reasons[] = "Sesuai dengan anggaran hemat Anda di bawah Rp 5 Juta (Harga: Rp " . $harga_formatted . ").";
+                        } elseif ($budget_range == '5_to_10' && $produk['harga_laptop'] <= 10000000) {
+                           $reasons[] = "Sesuai dengan anggaran Rp 5 - 10 Juta pilihan Anda (Harga: Rp " . $harga_formatted . ").";
+                        } elseif ($budget_range == '10_to_15' && $produk['harga_laptop'] <= 15000000) {
+                           $reasons[] = "Sesuai dengan anggaran Rp 10 - 15 Juta pilihan Anda (Harga: Rp " . $harga_formatted . ").";
+                        } elseif ($budget_range == 'above_15' && $produk['harga_laptop'] > 15000000) {
+                           $reasons[] = "Sesuai dengan anggaran premium di atas Rp 15 Juta (Harga: Rp " . $harga_formatted . ").";
+                        } elseif ($has_conflict) {
+                           $reasons[] = "Meskipun melebihi budget < Rp 5 Juta, laptop ini (Rp " . $harga_formatted . ") adalah pilihan terdekat untuk kebutuhan performa tinggi Anda.";
+                        }
+
+                        // 5. Special Features Matched
+                        if ($is_touchscreen && $produk['is_touchscreen']) {
+                           $reasons[] = "Menyediakan fitur Layar Sentuh (Touchscreen) sesuai keinginan Anda.";
+                        }
+                        if ($is_convertible && $produk['is_convertible']) {
+                           $reasons[] = "Memiliki desain fleksibel 2-in-1 yang bisa dilipat menjadi tablet.";
+                        }
+                        if ($has_backlit_kb && $produk['has_backlit_kb']) {
+                           $reasons[] = "Dilengkapi Keyboard Backlit untuk kenyamanan mengetik di kondisi minim cahaya.";
+                        }
+                        if ($has_biometric && $produk['has_biometric']) {
+                           $reasons[] = "Sistem keamanan biometrik (Fingerprint/Face Unlock) aktif untuk proteksi ekstra.";
+                        }
+
+                        $reasons_str = implode('||', $reasons);
+                     }
                ?>
                      <!--begin::Col-->
                      <div class="col-lg-4">
@@ -360,7 +423,7 @@ include 'header.php';
                                  </div>
                                  <!--end::Modal body-->
                                  <div class="d-grid gap-2">
-                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['storage'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
+                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['storage'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>', '<?= htmlspecialchars(addslashes($reasons_str), ENT_QUOTES, 'UTF-8') ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
                                  </div>
                               </div>
                               <!--end::Modal content-->
@@ -1321,6 +1384,22 @@ include 'header.php';
                   </div>
                </div>
                <h3 class="my-5 text-center" id="harga_laptop"></h3>
+               
+               <!-- Alasan Rekomendasi Section -->
+               <div class="alert alert-dismissible bg-light-success d-flex flex-column p-5 mb-5 border border-success border-dashed rounded" id="rekomendasi_section" style="display: none;">
+                  <div class="d-flex align-items-center mb-2">
+                     <span class="svg-icon svg-icon-2hx svg-icon-success me-4">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+                           <path d="M10.4343 12.4343L8.75 10.75C8.33579 10.3358 7.66421 10.3358 7.25 10.75C6.83579 11.1642 6.83579 11.8358 7.25 12.25L9.68579 14.6858C10.0967 15.0967 10.7725 15.0872 11.1716 14.6643L16.75 8.75C17.1408 8.33579 17.1408 7.66421 16.75 7.25C16.3592 6.83579 15.6876 6.83579 15.2968 7.25L10.4343 12.4343Z" fill="currentColor"/>
+                        </svg>
+                     </span>
+                     <h5 class="text-success fw-bold mb-0">Alasan Rekomendasi</h5>
+                  </div>
+                  <ul class="text-gray-800 fs-6 mb-0 ps-5 text-start" id="rekomendasi_reasons" style="list-style-type: disc;">
+                     <!-- populated dynamically -->
+                  </ul>
+               </div>
             </div>
             <!--end::Modal body-->
             <table class="fs-6 table table-hover table-bordered text-center">
@@ -1374,7 +1453,7 @@ include 'header.php';
    </div>
 
    <script>
-      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, storage, vga, screen, harga_laptop) {
+      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, storage, vga, screen, harga_laptop, reasons = '') {
          console.log(gambar_laptop);
          document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
          document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
@@ -1394,6 +1473,28 @@ include 'header.php';
          document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatAngka;
          const gambar_laptop1 = document.querySelector('.modal-image');
          gambar_laptop1.src = 'admin/img/' + gambar_laptop;
+
+         // Handle recommendation reasons dynamically
+         const recSection = document.querySelector('#rekomendasi_section');
+         const recReasons = document.querySelector('#rekomendasi_reasons');
+         if (recSection && recReasons) {
+            if (reasons && reasons.trim() !== '') {
+               recSection.style.setProperty('display', 'flex', 'important');
+               const reasonList = reasons.split('||');
+               recReasons.innerHTML = '';
+               reasonList.forEach(reason => {
+                  if (reason.trim() !== '') {
+                     const li = document.createElement('li');
+                     li.className = 'mb-1';
+                     li.textContent = reason;
+                     recReasons.appendChild(li);
+                  }
+               });
+            } else {
+               recSection.style.setProperty('display', 'none', 'important');
+               recReasons.innerHTML = '';
+            }
+         }
       }
    </script>
 
