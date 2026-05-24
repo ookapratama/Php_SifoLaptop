@@ -204,6 +204,72 @@ if ($_SESSION['role'] !== 'admin') {
 					</div>
 					<!--end::Input group-->
 
+					<!--begin::Heading-->
+					<div class="mb-13 mt-6 text-left">
+						<div class="text-muted fw-semibold fs-5">Spesifikasi KBF Tambahan</div>
+					</div>
+					<!--end::Heading-->
+
+					<!--begin::Input group-->
+					<div class="row g-9 mb-8">
+						<!--begin::Col-->
+						<div class="col-md-6 fv-row">
+							<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+								<span class="required">Berat Laptop (kg)</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Berat laptop dalam kg, gunakan titik untuk desimal (misal: 1.4)"></i>
+							</label>
+							<input required type="number" step="0.1" class="form-control form-control-solid" placeholder="Contoh: 1.4" name="berat_laptop" />
+						</div>
+						<!--end::Col-->
+						<!--begin::Col-->
+						<div class="col-md-6 fv-row">
+							<label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+								<span class="required">Kapasitas Baterai (WHr)</span>
+								<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Kapasitas baterai dalam watt-hour (misal: 56)"></i>
+							</label>
+							<input required type="number" class="form-control form-control-solid" placeholder="Contoh: 56" name="baterai_laptop" />
+						</div>
+						<!--end::Col-->
+					</div>
+					<!--end::Input group-->
+
+					<!--begin::Input group-->
+					<div class="row g-9 mb-8">
+						<div class="col-md-3 fv-row">
+							<div class="form-check form-check-custom form-check-solid">
+								<input class="form-check-input" type="checkbox" name="is_touchscreen" value="1" id="is_touchscreen" />
+								<label class="form-check-label fw-semibold text-gray-800" for="is_touchscreen">
+									Layar Sentuh (Touchscreen)
+								</label>
+							</div>
+						</div>
+						<div class="col-md-3 fv-row">
+							<div class="form-check form-check-custom form-check-solid">
+								<input class="form-check-input" type="checkbox" name="is_convertible" value="1" id="is_convertible" />
+								<label class="form-check-label fw-semibold text-gray-800" for="is_convertible">
+									Desain 2-in-1 / Lipat
+								</label>
+							</div>
+						</div>
+						<div class="col-md-3 fv-row">
+							<div class="form-check form-check-custom form-check-solid">
+								<input class="form-check-input" type="checkbox" name="has_backlit_kb" value="1" id="has_backlit_kb" />
+								<label class="form-check-label fw-semibold text-gray-800" for="has_backlit_kb">
+									Lampu Keyboard (Backlit)
+								</label>
+							</div>
+						</div>
+						<div class="col-md-3 fv-row">
+							<div class="form-check form-check-custom form-check-solid">
+								<input class="form-check-input" type="checkbox" name="has_biometric" value="1" id="has_biometric" />
+								<label class="form-check-label fw-semibold text-gray-800" for="has_biometric">
+									Sidik Jari / Wajah
+								</label>
+							</div>
+						</div>
+					</div>
+					<!--end::Input group-->
+
 					<!--begin::Actions-->
 					<div class="d-flex justify-content-between">
 						<a href="view_laptop.php" class="btn btn-light me-3">Cancel</a>

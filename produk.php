@@ -131,126 +131,197 @@ include 'header.php';
                <h3 class="fs-2hx text-dark mb-5" id="produk" data-kt-scroll-offset="{default: 125, lg: 150}">Produk</h3>
                <!--end::Title-->
                <!--begin::Description-->
-               <div class="fs-5 text-muted fw-bold">Save thousands to millions of bucks by using single tool
-                  <br />for different amazing and great useful admin
+               <div class="fs-5 text-muted fw-bold">Temukan laptop terbaik berdasarkan hasil rekomendasi filter cerdas kami.
                </div>
                <!--end::Description-->
             </div>
             <!--end::Heading-->
+
+            <?php
+            $has_conflict = false;
+            if (isset($_GET['submit_search'])) {
+               $kategori_laptop = isset($_GET['kategori_laptop']) ? mysqli_real_escape_string($db, $_GET['kategori_laptop']) : '';
+               $merk = isset($_GET['merk_laptop']) ? mysqli_real_escape_string($db, $_GET['merk_laptop']) : '';
+               $tujuan = isset($_GET['tujuan']) ? mysqli_real_escape_string($db, $_GET['tujuan']) : '';
+               $mobilitas = isset($_GET['mobilitas']) ? mysqli_real_escape_string($db, $_GET['mobilitas']) : '';
+               $baterai = isset($_GET['baterai']) ? mysqli_real_escape_string($db, $_GET['baterai']) : '';
+               $budget_range = isset($_GET['budget_range']) ? mysqli_real_escape_string($db, $_GET['budget_range']) : '';
+               $is_touchscreen = isset($_GET['is_touchscreen']) ? (int)$_GET['is_touchscreen'] : 0;
+               $is_convertible = isset($_GET['is_convertible']) ? (int)$_GET['is_convertible'] : 0;
+               $has_backlit_kb = isset($_GET['has_backlit_kb']) ? (int)$_GET['has_backlit_kb'] : 0;
+               $has_biometric = isset($_GET['has_biometric']) ? (int)$_GET['has_biometric'] : 0;
+
+               $min_ram_bobot = 0;
+               $min_prosesor_bobot = 0;
+               $min_storage_bobot = 0;
+               $min_vga_bobot = 0;
+
+               if ($tujuan == 'office_ringan') {
+                  $min_ram_bobot = 4;
+                  $min_prosesor_bobot = 1;
+                  $min_storage_bobot = 1;
+                  $min_vga_bobot = 1;
+               } elseif ($tujuan == 'bisnis') {
+                  $min_ram_bobot = 8;
+                  $min_prosesor_bobot = 3;
+                  $min_storage_bobot = 2;
+                  $min_vga_bobot = 1;
+               } elseif ($tujuan == 'editing') {
+                  $min_ram_bobot = 8;
+                  $min_prosesor_bobot = 5;
+                  $min_storage_bobot = 2;
+                  $min_vga_bobot = 3;
+               } elseif ($tujuan == 'gaming') {
+                  $min_ram_bobot = 16;
+                  $min_prosesor_bobot = 5;
+                  $min_storage_bobot = 2;
+                  $min_vga_bobot = 4;
+               }
+
+               // Conflict resolution: Gaming/Editing on under 5M budget
+               if (($tujuan == 'editing' || $tujuan == 'gaming') && $budget_range == 'under_5') {
+                  $has_conflict = true;
+                  $budget_max_val = 10000000; // Relax budget limit to show options
+               } else {
+                  if ($budget_range == 'under_5') {
+                     $budget_max_val = 5000000;
+                  } elseif ($budget_range == '5_to_10') {
+                     $budget_max_val = 10000000;
+                  } elseif ($budget_range == '10_to_15') {
+                     $budget_max_val = 15000000;
+                  } else {
+                     $budget_max_val = 0; // Above 15 Juta has no upper limit
+                  }
+               }
+
+               $query = "SELECT
+               laptop.*,
+               ram_feature.nama_fitur AS ram,
+               prosesor_feature.nama_fitur AS prosesor,
+               storage_feature.nama_fitur AS storage,
+               vga_feature.nama_fitur AS vga,
+               screen_feature.nama_fitur AS screen,
+               kategori_laptop.nama_kategori
+           FROM
+               laptop
+           JOIN
+               fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
+           JOIN
+               fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
+           JOIN
+               fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
+           JOIN
+               fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+           JOIN
+               fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
+           LEFT JOIN
+               kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
+           WHERE 1 ";
+
+               if (!empty($kategori_laptop)) {
+                  $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
+               }
+
+               if (!empty($merk)) {
+                  $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
+               }
+
+               if ($budget_max_val > 0) {
+                  $query .= " AND harga_laptop <= $budget_max_val";
+               }
+
+               if ($min_ram_bobot > 0) {
+                  $query .= " AND ram_feature.bobot >= $min_ram_bobot";
+               }
+
+               if ($min_prosesor_bobot > 0) {
+                  $query .= " AND prosesor_feature.bobot >= $min_prosesor_bobot";
+               }
+
+               if ($min_storage_bobot > 0) {
+                  $query .= " AND storage_feature.bobot >= $min_storage_bobot";
+               }
+
+               if ($min_vga_bobot > 0) {
+                  $query .= " AND vga_feature.bobot >= $min_vga_bobot";
+               }
+
+               // Filter Mobilitas (Layar & Berat)
+               if ($mobilitas == 'sangat_sering') {
+                  $query .= " AND screen_feature.bobot <= 13 AND berat_laptop <= 1.4";
+               } elseif ($mobilitas == 'kadang') {
+                  $query .= " AND screen_feature.bobot BETWEEN 14 AND 15 AND berat_laptop <= 1.9";
+               } elseif ($mobilitas == 'jarang') {
+                  $query .= " AND screen_feature.bobot >= 15";
+               }
+
+               // Filter Baterai
+               if ($baterai == 'terbatas') {
+                  $query .= " AND baterai_laptop >= 55";
+               }
+
+               // Filter Fitur Tambahan
+               if ($is_touchscreen) {
+                  $query .= " AND is_touchscreen = 1";
+               }
+               if ($is_convertible) {
+                  $query .= " AND is_convertible = 1";
+               }
+               if ($has_backlit_kb) {
+                  $query .= " AND has_backlit_kb = 1";
+               }
+               if ($has_biometric) {
+                  $query .= " AND has_biometric = 1";
+               }
+
+               $produks = select($query);
+            } else {
+               $produks = select("SELECT laptop.*, 
+                  ram_feature.nama_fitur AS ram,
+                  prosesor_feature.nama_fitur AS prosesor,
+                  storage_feature.nama_fitur AS storage,
+                  vga_feature.nama_fitur AS vga,
+                  screen_feature.nama_fitur AS screen,
+                  kategori_laptop.nama_kategori
+                  FROM laptop
+                  JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
+                  JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
+                  JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
+                  JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+                  JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
+                  LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
+            }
+            ?>
+
+            <!--begin::Conflict Alert-->
+            <?php if ($has_conflict) : ?>
+               <div class="alert alert-dismissible bg-light-warning d-flex flex-column flex-sm-row p-5 mb-10 border border-warning border-dashed rounded">
+                  <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+                        <rect x="11" y="14" width="2" height="2" rx="1" fill="currentColor"/>
+                        <rect x="11" y="7" width="2" height="5" rx="1" fill="currentColor"/>
+                     </svg>
+                  </span>
+                  <div class="d-flex flex-column pe-0 pe-sm-10">
+                     <h5 class="mb-1 text-dark fw-bold">Anggaran Kurang Memadai</h5>
+                     <span>Anda memilih kebutuhan <strong>Kerja Berat/Gaming</strong> dengan budget <strong>Di bawah Rp 5 Juta</strong>. Kebutuhan ini biasanya memerlukan spesifikasi tinggi yang harganya di atas Rp 10 Juta. Kami menampilkan laptop terdekat yang mungkin cocok dengan sedikit melonggarkan batas budget Anda.</span>
+                  </div>
+                  <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+                     <span class="svg-icon svg-icon-1 svg-icon-warning">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"/>
+                           <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"/>
+                        </svg>
+                     </span>
+                  </button>
+               </div>
+            <?php endif; ?>
+
             <!--begin::Row-->
             <div class="row g-lg-10 mb-10 mb-lg-20">
 
                <?php
-
-                if (isset($_GET['submit_search'])) {
-                   $kategori_laptop = mysqli_real_escape_string($db, $_GET['kategori_laptop']);
-                   $merk = mysqli_real_escape_string($db, $_GET['merk_laptop']);
-                   $tujuan = isset($_GET['tujuan']) ? mysqli_real_escape_string($db, $_GET['tujuan']) : '';
-                   $budget_maks = isset($_GET['budget_maks']) ? (float)preg_replace("/[^0-9]/", '', $_GET['budget_maks']) : 0;
-
-                   $min_ram_bobot = 0;
-                   $min_prosesor_bobot = 0;
-                   $min_storage_bobot = 0;
-                   $min_vga_bobot = 0;
-
-                   if ($tujuan == 'office_ringan') {
-                      $min_ram_bobot = 4;
-                      $min_prosesor_bobot = 1;
-                      $min_storage_bobot = 1;
-                      $min_vga_bobot = 1;
-                   } elseif ($tujuan == 'bisnis') {
-                      $min_ram_bobot = 8;
-                      $min_prosesor_bobot = 3;
-                      $min_storage_bobot = 2;
-                      $min_vga_bobot = 1;
-                   } elseif ($tujuan == 'editing') {
-                      $min_ram_bobot = 8;
-                      $min_prosesor_bobot = 5;
-                      $min_storage_bobot = 2;
-                      $min_vga_bobot = 3;
-                   } elseif ($tujuan == 'gaming') {
-                      $min_ram_bobot = 16;
-                      $min_prosesor_bobot = 5;
-                      $min_storage_bobot = 2;
-                      $min_vga_bobot = 4;
-                   } elseif ($tujuan == 'programming') {
-                      $min_ram_bobot = 16;
-                      $min_prosesor_bobot = 7;
-                      $min_storage_bobot = 2;
-                      $min_vga_bobot = 2;
-                   }
-
-                   $query = "SELECT
-                   laptop.*,
-                   ram_feature.nama_fitur AS ram,
-                   prosesor_feature.nama_fitur AS prosesor,
-                   storage_feature.nama_fitur AS storage,
-                   vga_feature.nama_fitur AS vga,
-                   screen_feature.nama_fitur AS screen,
-                   kategori_laptop.nama_kategori
-               FROM
-                   laptop
-               JOIN
-                   fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
-               JOIN
-                   fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
-               JOIN
-                   fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
-               JOIN
-                   fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-               JOIN
-                   fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
-               LEFT JOIN
-                   kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
-               WHERE 1 ";
-
-                   if (!empty($kategori_laptop)) {
-                      $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
-                   }
-
-                   if (!empty($merk)) {
-                      $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
-                   }
-
-                   if ($budget_maks > 0) {
-                      $query .= " AND harga_laptop <= $budget_maks";
-                   }
-
-                   if ($min_ram_bobot > 0) {
-                      $query .= " AND ram_feature.bobot >= $min_ram_bobot";
-                   }
-
-                   if ($min_prosesor_bobot > 0) {
-                      $query .= " AND prosesor_feature.bobot >= $min_prosesor_bobot";
-                   }
-
-                   if ($min_storage_bobot > 0) {
-                      $query .= " AND storage_feature.bobot >= $min_storage_bobot";
-                   }
-
-                   if ($min_vga_bobot > 0) {
-                      $query .= " AND vga_feature.bobot >= $min_vga_bobot";
-                   }
-
-                   $produks = select($query);
-                } else {
-
-                  $produks = select("SELECT laptop.*, 
-                     ram_feature.nama_fitur AS ram,
-                     prosesor_feature.nama_fitur AS prosesor,
-                     storage_feature.nama_fitur AS storage,
-                     vga_feature.nama_fitur AS vga,
-                     screen_feature.nama_fitur AS screen,
-                     kategori_laptop.nama_kategori
-                     FROM laptop
-                     JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
-                     JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
-                     JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
-                     JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-                     JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
-                     LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
-               }
-
                if (mysqli_num_rows($produks) != 0) {
                   while ($produk = mysqli_fetch_assoc($produks)) :
                      // var_dump($produk);

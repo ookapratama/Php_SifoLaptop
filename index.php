@@ -1325,51 +1325,299 @@ include 'header.php';
                <!--begin:Form-->
                <form class="form" action="produk.php" id="wizardForm" method="GET">
                   <!--begin::Heading-->
-                  <div class="mb-13 text-center">
+                  <div class="mb-8 text-center">
                      <!--begin::Title-->
-                     <h1 class="mb-3"></h1>
+                     <h1 class="mb-3">Kuis Rekomendasi Laptop</h1>
                      <!--end::Title-->
                      <!--begin::Description-->
-                     <div class="text-muted fw-semibold fs-5">Masukkan kata kunci pencarian laptop
-                     </div>
+                     <div class="text-muted fw-semibold fs-5">Jawab 5 pertanyaan mudah untuk menemukan laptop terbaik Anda.</div>
                      <!--end::Description-->
                   </div>
                   <!--end::Heading-->
 
                   <!-- bar -->
-                  <!-- <div class="f1-steps">
-                     <div class="f1-progress">
-                        <div class="f1-progress-line" data-now-value="25" data-number-of-steps="4" style="width: 25%;"></div>
+                  <div class="mb-8">
+                     <div class="progress mb-4" style="height: 8px;">
+                        <div id="wizard-progress" class="progress-bar bg-success" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                      </div>
-                     <div class="">
-
-                        <div class="f1-step active d-flex justify-content-center">
-                           <div class="f1-step-icon">
-                              <i class="fa fa-user" style="line-height:2 !important;margin-left:15px; margin-top: 3px; font-size: 1.5rem; color: white;"></i>
-                           </div>
-                        </div>
-
-                        <div class="f1-step  d-flex justify-content-center">
-                           <div class="f1-step-icon">
-                              <i class="fa fa-address-book" style="line-height:2 !important;margin-left:15px; margin-top: 3px; font-size: 1.5rem; color: white;"></i>
-                           </div>
-                        </div>
-
+                     <div class="d-flex justify-content-between text-muted fs-8 fw-semibold px-2">
+                        <span class="step-indicator active text-primary" id="indicator-1">1. Use Case</span>
+                        <span class="step-indicator text-muted" id="indicator-2">2. Mobilitas</span>
+                        <span class="step-indicator text-muted" id="indicator-3">3. Baterai</span>
+                        <span class="step-indicator text-muted" id="indicator-4">4. Budget</span>
+                        <span class="step-indicator text-muted" id="indicator-5">5. Fitur</span>
                      </div>
-                  </div> -->
+                  </div>
 
-
-                  <!-- start Step 1 -->
-                  <!--begin::Input group-->
+                  <!-- start Step 1: Use Case -->
                   <fieldset id="step1" class="step">
-                     <div class="row">
-
+                     <div class="mb-6 text-center">
+                        <h3 class="fw-bold text-dark">Laptop ini nantinya paling sering digunakan untuk apa?</h3>
+                        <p class="text-muted">Ini membantu kami menentukan performa prosesor dan kapasitas RAM yang paling tepat.</p>
+                     </div>
+                     <div class="row g-4 mb-8">
                         <div class="col-md-6">
-                           <!--begin::Col-->
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer active h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="tujuan" value="office_ringan" checked required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Tugas Harian Standar</span>
+                                    <span class="text-muted fs-7">Mengetik dokumen, browsing internet, Zoom meeting, dan menonton film.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="tujuan" value="bisnis" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Kreatif Ringan & Kerja Harian</span>
+                                    <span class="text-muted fs-7">Desain ringan (Canva/Photoshop), presentasi bisnis, edit foto/video pendek.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="tujuan" value="editing" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Profesional & Kerja Berat</span>
+                                    <span class="text-muted fs-7">Editing video 4K, render 3D, programming intensif, atau AutoCAD.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="tujuan" value="gaming" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Gaming Intensif</span>
+                                    <span class="text-muted fs-7">Menjalankan game PC modern dengan kualitas grafis tinggi secara lancar.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                     </div>
+                     <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary btn-next">Lanjut <i class="fa fa-arrow-right ms-2"></i></button>
+                     </div>
+                  </fieldset>
+                  <!-- end Step 1 -->
 
-                           <label class=" fs-6 fw-semibold mb-2">Merk Laptop</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="merk_laptop">
-                              <option value="">-- Pilih --</option>
+                  <!-- start Step 2: Mobilitas -->
+                  <fieldset id="step2" class="step" style="display: none;">
+                     <div class="mb-6 text-center">
+                        <h3 class="fw-bold text-dark">Seberapa sering Anda membawa laptop pergi bepergian?</h3>
+                        <p class="text-muted">Ini membantu kami menyaring ukuran layar dan berat laptop yang paling ideal.</p>
+                     </div>
+                     <div class="row g-4 mb-8">
+                        <div class="col-md-12">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer active h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="mobilitas" value="sangat_sering" checked required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Sangat Sering (Mobile Tinggi)</span>
+                                    <span class="text-muted fs-7">Butuh yang tipis, ringkas, dan ringan untuk dibawa ke kafe/kampus (berat ≤ 1.4 kg, layar ≤ 13.3").</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-12">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="mobilitas" value="kadang" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Kadang-kadang</span>
+                                    <span class="text-muted fs-7">Ukuran standar, seimbang antara kenyamanan layar dan kemudahan dibawa (berat ≤ 1.9 kg, layar 14" - 15.6").</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-12">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="mobilitas" value="jarang" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Jarang (Lebih sering di meja kerja)</span>
+                                    <span class="text-muted fs-7">Lebih mementingkan ukuran layar besar agar kerja nyaman (layar ≥ 15.6", tanpa batas berat).</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                     </div>
+                     <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-warning btn-prev"><i class="fa fa-arrow-left me-2"></i> Sebelumnya</button>
+                        <button type="button" class="btn btn-primary btn-next">Lanjut <i class="fa fa-arrow-right ms-2"></i></button>
+                     </div>
+                  </fieldset>
+                  <!-- end Step 2 -->
+
+                  <!-- start Step 3: Baterai -->
+                  <fieldset id="step3" class="step" style="display: none;">
+                     <div class="mb-6 text-center">
+                        <h3 class="fw-bold text-dark">Bagaimana situasi akses listrik di tempat Anda bekerja?</h3>
+                        <p class="text-muted">Ini membantu menyaring laptop dengan kapasitas baterai yang memadai.</p>
+                     </div>
+                     <div class="row g-4 mb-8">
+                        <div class="col-md-12">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer active h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="baterai" value="terbatas" checked required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Terbatas (Sering di luar/sulit cari colokan)</span>
+                                    <span class="text-muted fs-7">Sering bekerja di luar ruangan/kafe. Butuh daya tahan baterai andal (kapasitas baterai ≥ 55 WHr).</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-12">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="baterai" value="selalu" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Selalu Tersedia (Bekerja dekat colokan listrik)</span>
+                                    <span class="text-muted fs-7">Biasa bekerja di meja dengan akses daya konstan. Kapasitas baterai tidak menjadi prioritas utama.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                     </div>
+                     <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-warning btn-prev"><i class="fa fa-arrow-left me-2"></i> Sebelumnya</button>
+                        <button type="button" class="btn btn-primary btn-next">Lanjut <i class="fa fa-arrow-right ms-2"></i></button>
+                     </div>
+                  </fieldset>
+                  <!-- end Step 3 -->
+
+                  <!-- start Step 4: Budget -->
+                  <fieldset id="step4" class="step" style="display: none;">
+                     <div class="mb-6 text-center">
+                        <h3 class="fw-bold text-dark">Berapa anggaran maksimal yang Anda siapkan?</h3>
+                        <p class="text-muted">Ini menyaring laptop agar sesuai dengan batas budget Anda.</p>
+                     </div>
+                     <div class="row g-4 mb-8">
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="budget_range" value="under_5" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Di bawah Rp 5 Juta</span>
+                                    <span class="text-muted fs-7">Sangat hemat, untuk kebutuhan belajar standar.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer active h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="budget_range" value="5_to_10" checked required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Rp 5 Juta – Rp 10 Juta</span>
+                                    <span class="text-muted fs-7">Populer & value-for-money untuk kebanyakan pengguna.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="budget_range" value="10_to_15" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Rp 10 Juta – Rp 15 Juta</span>
+                                    <span class="text-muted fs-7">Mid-range premium, laptop tipis bertenaga, atau gaming entry.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex flex-stack btn btn-outline btn-outline-dashed btn-active-light-primary p-5 text-start cursor-pointer h-100">
+                              <div class="d-flex align-items-center me-2">
+                                 <div class="form-check form-check-custom form-check-solid form-check-success me-4">
+                                    <input class="form-check-input" type="radio" name="budget_range" value="above_15" required />
+                                 </div>
+                                 <div class="flex-grow-1">
+                                    <span class="d-block fw-bold text-gray-800 fs-6">Di atas Rp 15 Juta</span>
+                                    <span class="text-muted fs-7">High-end premium untuk performa maksimal & gaming berat.</span>
+                                 </div>
+                              </div>
+                           </label>
+                        </div>
+                     </div>
+                     <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-warning btn-prev"><i class="fa fa-arrow-left me-2"></i> Sebelumnya</button>
+                        <button type="button" class="btn btn-primary btn-next">Lanjut <i class="fa fa-arrow-right ms-2"></i></button>
+                     </div>
+                  </fieldset>
+                  <!-- end Step 4 -->
+
+                  <!-- start Step 5: Fitur Tambahan & Preferensi -->
+                  <fieldset id="step5" class="step" style="display: none;">
+                     <div class="mb-6 text-center">
+                        <h3 class="fw-bold text-dark">Fitur Tambahan & Preferensi</h3>
+                        <p class="text-muted">Centang fitur yang wajib ada pada laptop pilihan Anda (opsional).</p>
+                     </div>
+                     <div class="row g-4 mb-6">
+                        <div class="col-md-6">
+                           <label class="d-flex align-items-center btn btn-outline btn-outline-dashed btn-active-light-primary p-4 cursor-pointer w-100">
+                              <input class="form-check-input me-4" type="checkbox" name="is_touchscreen" value="1" />
+                              <span class="fw-bold text-gray-800">Layar Sentuh (Touchscreen)</span>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex align-items-center btn btn-outline btn-outline-dashed btn-active-light-primary p-4 cursor-pointer w-100">
+                              <input class="form-check-input me-4" type="checkbox" name="is_convertible" value="1" />
+                              <span class="fw-bold text-gray-800">Desain 2-in-1 (Bisa Dilipat)</span>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex align-items-center btn btn-outline btn-outline-dashed btn-active-light-primary p-4 cursor-pointer w-100">
+                              <input class="form-check-input me-4" type="checkbox" name="has_backlit_kb" value="1" />
+                              <span class="fw-bold text-gray-800">Lampu Keyboard (Backlit)</span>
+                           </label>
+                        </div>
+                        <div class="col-md-6">
+                           <label class="d-flex align-items-center btn btn-outline btn-outline-dashed btn-active-light-primary p-4 cursor-pointer w-100">
+                              <input class="form-check-input me-4" type="checkbox" name="has_biometric" value="1" />
+                              <span class="fw-bold text-gray-800">Sidik Jari / Face Unlock</span>
+                           </label>
+                        </div>
+                     </div>
+
+                     <div class="separator separator-dashed my-6"></div>
+
+                     <!-- Brand and Kategori optional preferences -->
+                     <div class="row g-4 mb-8">
+                        <div class="col-md-6">
+                           <label class="fs-6 fw-semibold mb-2">Preferensi Merk (Opsional)</label>
+                           <select class="form-select form-select-solid" name="merk_laptop">
+                              <option value="">Semua Merk</option>
                               <?php
                               $result = select("SELECT DISTINCT merk_laptop FROM laptop");
                               while ($data = mysqli_fetch_assoc($result)) :
@@ -1377,14 +1625,11 @@ include 'header.php';
                                  <option value="<?= $data['merk_laptop'] ?>"><?= $data['merk_laptop'] ?></option>
                               <?php endwhile; ?>
                            </select>
-                           <!--end::Col-->
                         </div>
                         <div class="col-md-6">
-                           <!--begin::Col-->
-
-                           <label class=" fs-6 fw-semibold mb-2">Kategori Laptop</label>
-                           <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="kategori_laptop">
-                              <option value="">-- Pilih --</option>
+                           <label class="fs-6 fw-semibold mb-2">Kategori Laptop (Opsional)</label>
+                           <select class="form-select form-select-solid" name="kategori_laptop">
+                              <option value="">Semua Kategori</option>
                               <?php
                               $result = select("SELECT * FROM kategori_laptop");
                               while ($data = mysqli_fetch_assoc($result)) :
@@ -1392,59 +1637,15 @@ include 'header.php';
                                   <option value="<?= $data['nama_kategori'] ?>"><?= $data['nama_kategori'] ?></option>
                               <?php endwhile; ?>
                            </select>
-                           <!--end::Col-->
                         </div>
                      </div>
-                     <div class="f1-buttons">
-                        <button type="button" id="next1" class="btn btn-primary btn-next">Next <i class="fa fa-arrow-right"></i></button>
+
+                     <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-warning btn-prev"><i class="fa fa-arrow-left me-2"></i> Sebelumnya</button>
+                        <button type="submit" name="submit_search" class="btn btn-success">Cari Laptop <i class="fa fa-search ms-2"></i></button>
                      </div>
                   </fieldset>
-                  <!--end::Input group-->
-                  <!-- end Step 1 -->
-
-                  <!-- start Step 2 -->
-                  <!--begin::Input group-->
-                  <fieldset id="step2" class="step">
-
-
-                     <!--begin::Input group-->
-                     <div class="row g-9 mb-8">
-                        <!--begin::Col-->
-                        <div class="col-md-6">
-                           <!--begin::Col-->
-
-                           <label class="required fs-6 fw-semibold mb-2">Tujuan Penggunaan</label>
-                           <select required class="form-select form-select-solid" data-control="select2" data-hide-search="true" name="tujuan">
-                              <option value="" disabled selected>-- Pilih --</option>
-                              <option value="office_ringan">Belajar / Office Ringan</option>
-                              <option value="bisnis">Bisnis / Kerja Produktif</option>
-                              <option value="editing">Desain Grafis / Editing Video</option>
-                              <option value="gaming">Gaming Berat / Render 3D</option>
-                              <option value="programming">Programming / Developer</option>
-                           </select>
-                           <!--end::Col-->
-                        </div>
-                        <!--end::Col-->
-                        <!--begin::Col-->
-                        <div class="col-md-6 fv-row">
-                           <label class="required fs-6 fw-semibold mb-2">Budget Maksimal</label>
-                           <input required type="text" class="form-control form-control-solid" placeholder="Rp. 10.000.000" name="budget_maks" value="Rp. 10.000.000" id="rupiah" />
-                        </div>
-                        <!--end::Col-->
-                     </div>
-                     <!--end::Input group-->
-
-                     <!--begin::Actions-->
-                     <div class="f1-buttons">
-                        <button type="button" id="prev2" class="btn btn-warning btn-previous"><i class="fa fa-arrow-left"></i> Sebelumnya
-                        </button>
-
-                        <button type="submit" name="submit_search" class="btn btn-primary">
-                           <span class="indicator-label">Submit</span>
-                        </button>
-                     </div>
-                     <!--end::Actions-->
-                  </fieldset>
+                  <!-- end Step 5 -->
 
                </form>
                <!--end:Form-->
@@ -1510,69 +1711,129 @@ include 'header.php';
    <!-- end::Script ke rupiah -->
 
 
-   <!-- Wizard modal search -->
-   <script>
-      document.addEventListener("DOMContentLoaded", function() {
-         const form = document.getElementById("wizardForm");
-         const steps = document.querySelectorAll(".step");
-         let currentStep = 0;
+    <!-- Wizard modal search -->
+    <script>
+       document.addEventListener("DOMContentLoaded", function() {
+          const form = document.getElementById("wizardForm");
+          const steps = document.querySelectorAll(".step");
+          let currentStep = 0;
 
-         function showStep(stepIndex) {
-            steps.forEach((step, index) => {
-               if (index === stepIndex) {
-                  step.style.display = "block";
-               } else {
-                  step.style.display = "none";
-               }
-            });
-         }
+          function showStep(stepIndex) {
+             steps.forEach((step, index) => {
+                if (index === stepIndex) {
+                   step.style.display = "block";
+                } else {
+                   step.style.display = "none";
+                }
+             });
 
-         showStep(currentStep);
+             // Update progress bar
+             const percent = ((stepIndex + 1) / steps.length) * 100;
+             const progress = document.getElementById("wizard-progress");
+             if (progress) {
+                progress.style.width = percent + "%";
+                progress.setAttribute("aria-valuenow", percent);
+             }
 
-         const nextButtons = document.querySelectorAll("[id^='next']");
-         const prevButtons = document.querySelectorAll("[id^='prev']");
+             // Update step indicators
+             for (let i = 1; i <= steps.length; i++) {
+                const indicator = document.getElementById("indicator-" + i);
+                if (indicator) {
+                   if (i <= stepIndex + 1) {
+                      indicator.classList.add("active");
+                      indicator.classList.add("text-primary");
+                      indicator.classList.remove("text-muted");
+                   } else {
+                      indicator.classList.remove("active");
+                      indicator.classList.remove("text-primary");
+                      indicator.classList.add("text-muted");
+                   }
+                }
+             }
+          }
 
-         nextButtons.forEach((button, index) => {
-            button.addEventListener("click", function(e) {
-               e.preventDefault();
-               if (validateStep(currentStep)) {
-                  if (currentStep < steps.length - 1) {
-                     currentStep++;
-                     showStep(currentStep);
-                  }
-               } else {
-                  alert("Harap isi semua field sebelum melanjutkan.");
-                  // swal('success');
-               }
-            });
-         });
+          showStep(currentStep);
 
-         prevButtons.forEach((button, index) => {
-            button.addEventListener("click", function(e) {
-               e.preventDefault();
-               if (currentStep > 0) {
-                  currentStep--;
-                  showStep(currentStep);
-               }
-            });
-         });
+          const nextButtons = document.querySelectorAll(".btn-next");
+          const prevButtons = document.querySelectorAll(".btn-prev");
 
-         function validateStep(stepIndex) {
-            const inputs = steps[stepIndex].querySelectorAll("input[required], select[required]");
-            let isValid = true;
+          nextButtons.forEach((button) => {
+             button.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (validateStep(currentStep)) {
+                   if (currentStep < steps.length - 1) {
+                      currentStep++;
+                      showStep(currentStep);
+                   }
+                } else {
+                   alert("Harap isi semua field sebelum melanjutkan.");
+                }
+             });
+          });
 
-            inputs.forEach((input) => {
-               if (input.value.trim() === "") {
-                  isValid = false;
-               }
-            });
+          prevButtons.forEach((button) => {
+             button.addEventListener("click", function(e) {
+                e.preventDefault();
+                if (currentStep > 0) {
+                   currentStep--;
+                   showStep(currentStep);
+                }
+             });
+          });
 
-            return isValid;
-         }
-      });
-   </script>
+          function validateStep(stepIndex) {
+             const inputs = steps[stepIndex].querySelectorAll("input[required], select[required]");
+             let isValid = true;
+
+             inputs.forEach((input) => {
+                if (input.type === "radio") {
+                   const name = input.getAttribute("name");
+                   const checkedRadio = steps[stepIndex].querySelector(`input[name="${name}"]:checked`);
+                   if (!checkedRadio) {
+                      isValid = false;
+                   }
+                } else if (input.value.trim() === "") {
+                   isValid = false;
+                }
+             });
+
+             return isValid;
+          }
+
+          // Handle active classes on custom cards when checking inputs
+          document.querySelectorAll("#wizardForm input[type='radio']").forEach(input => {
+             input.addEventListener("change", function() {
+                const name = input.getAttribute("name");
+                document.querySelectorAll(`input[name='${name}']`).forEach(sibling => {
+                   const siblingLabel = sibling.closest("label");
+                   if (siblingLabel) {
+                      if (sibling.checked) {
+                         siblingLabel.classList.add("active");
+                      } else {
+                         siblingLabel.classList.remove("active");
+                      }
+                   }
+                });
+             });
+          });
+
+          document.querySelectorAll("#wizardForm input[type='checkbox']").forEach(input => {
+             input.addEventListener("change", function() {
+                const label = input.closest("label");
+                if (label) {
+                   if (input.checked) {
+                      label.classList.add("active");
+                   } else {
+                      label.classList.remove("active");
+                   }
+                }
+             });
+          });
+       });
+    </script>
 
    <?php
    include 'footer.php';
 
    ?>
+</content>

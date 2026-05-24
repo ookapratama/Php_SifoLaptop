@@ -18,26 +18,33 @@ if ($_SESSION['role'] !== 'admin' && $jenis !== 'admin') {
 }
 
 if ($proses == 'store') {
-   if ($jenis == 'laptop') {
-      $merk_laptop = $_POST['merk_laptop'];
-      $kategori_id = $_POST['kategori_laptop'];
-      $no_serial = $_POST['no_serial'];
-      $harga_laptop = $_POST['harga_laptop'];
-      $ram_laptop = $_POST['ram_laptop'];
-      $prosesor_laptop = $_POST['prosesor_laptop'];
-      $vga_laptop = $_POST['vga_laptop'];
-      $model_laptop = $_POST['model_laptop'];
-      $storage_laptop = $_POST['storage_laptop'];
-      $screen_laptop = $_POST['screen_laptop'];
-      
-      $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
-      $uniq_name = upload_gambar();
+    if ($jenis == 'laptop') {
+       $merk_laptop = $_POST['merk_laptop'];
+       $kategori_id = $_POST['kategori_laptop'];
+       $no_serial = $_POST['no_serial'];
+       $harga_laptop = $_POST['harga_laptop'];
+       $ram_laptop = $_POST['ram_laptop'];
+       $prosesor_laptop = $_POST['prosesor_laptop'];
+       $vga_laptop = $_POST['vga_laptop'];
+       $model_laptop = $_POST['model_laptop'];
+       $storage_laptop = $_POST['storage_laptop'];
+       $screen_laptop = $_POST['screen_laptop'];
+       
+       $berat_laptop = !empty($_POST['berat_laptop']) ? (float)$_POST['berat_laptop'] : null;
+       $baterai_laptop = !empty($_POST['baterai_laptop']) ? (int)$_POST['baterai_laptop'] : null;
+       $is_touchscreen = isset($_POST['is_touchscreen']) ? (int)$_POST['is_touchscreen'] : 0;
+       $is_convertible = isset($_POST['is_convertible']) ? (int)$_POST['is_convertible'] : 0;
+       $has_backlit_kb = isset($_POST['has_backlit_kb']) ? (int)$_POST['has_backlit_kb'] : 0;
+       $has_biometric = isset($_POST['has_biometric']) ? (int)$_POST['has_biometric'] : 0;
+       
+       $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
+       $uniq_name = upload_gambar();
 
-      $stmt = $db->prepare("INSERT INTO laptop (kategori_id, merk_laptop, no_serial, harga_laptop, ram_laptop, prosesor_laptop, storage_laptop, vga_laptop, screen_laptop, gambar_laptop, model_laptop) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("issiiiiisss", $kategori_id, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop);
-      $stmt->execute();
-      $data_laptop = $stmt->affected_rows;
-      $stmt->close();
+       $stmt = $db->prepare("INSERT INTO laptop (kategori_id, merk_laptop, no_serial, harga_laptop, ram_laptop, prosesor_laptop, storage_laptop, vga_laptop, screen_laptop, gambar_laptop, model_laptop, berat_laptop, baterai_laptop, is_touchscreen, is_convertible, has_backlit_kb, has_biometric) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+       $stmt->bind_param("issiiiiisssdiiiii", $kategori_id, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop, $berat_laptop, $baterai_laptop, $is_touchscreen, $is_convertible, $has_backlit_kb, $has_biometric);
+       $stmt->execute();
+       $data_laptop = $stmt->affected_rows;
+       $stmt->close();
 
       if ($data_laptop > 0) {
          echo "<script>
@@ -78,34 +85,41 @@ if ($proses == 'store') {
       }
    }
 } else {
-   if ($jenis == 'laptop') {
-      $id_laptop = $_POST['id_laptop'];
-      $merk_laptop = $_POST['merk_laptop'];
-      $kategori_laptop = $_POST['kategori_laptop'];
-      $no_serial = $_POST['no_serial'];
-      $model_laptop = $_POST['model_laptop'];
-      $harga_laptop = $_POST['harga_laptop'];
-      $prosesor_laptop = $_POST['prosesor_laptop'];
-      $ram_laptop = $_POST['ram_laptop'];
-      $storage_laptop = $_POST['storage_laptop'];
-      $vga_laptop = $_POST['vga_laptop'];
-      $screen_laptop = $_POST['screen_laptop'];
-      $gambar_lama = $_POST['gambar_lama'];
+    if ($jenis == 'laptop') {
+       $id_laptop = $_POST['id_laptop'];
+       $merk_laptop = $_POST['merk_laptop'];
+       $kategori_laptop = $_POST['kategori_laptop'];
+       $no_serial = $_POST['no_serial'];
+       $model_laptop = $_POST['model_laptop'];
+       $harga_laptop = $_POST['harga_laptop'];
+       $prosesor_laptop = $_POST['prosesor_laptop'];
+       $ram_laptop = $_POST['ram_laptop'];
+       $storage_laptop = $_POST['storage_laptop'];
+       $vga_laptop = $_POST['vga_laptop'];
+       $screen_laptop = $_POST['screen_laptop'];
+       $gambar_lama = $_POST['gambar_lama'];
 
-      $error = $_FILES['gambar_laptop']['error'];
-      if ($error === 4) {
-         $uniq_name = $gambar_lama;
-      } else {
-         $uniq_name = upload_gambar();
-      }
+       $berat_laptop = !empty($_POST['berat_laptop']) ? (float)$_POST['berat_laptop'] : null;
+       $baterai_laptop = !empty($_POST['baterai_laptop']) ? (int)$_POST['baterai_laptop'] : null;
+       $is_touchscreen = isset($_POST['is_touchscreen']) ? (int)$_POST['is_touchscreen'] : 0;
+       $is_convertible = isset($_POST['is_convertible']) ? (int)$_POST['is_convertible'] : 0;
+       $has_backlit_kb = isset($_POST['has_backlit_kb']) ? (int)$_POST['has_backlit_kb'] : 0;
+       $has_biometric = isset($_POST['has_biometric']) ? (int)$_POST['has_biometric'] : 0;
 
-      $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
+       $error = $_FILES['gambar_laptop']['error'];
+       if ($error === 4) {
+          $uniq_name = $gambar_lama;
+       } else {
+          $uniq_name = upload_gambar();
+       }
 
-      $stmt = $db->prepare("UPDATE laptop SET kategori_id = ?, merk_laptop = ?, no_serial = ?, harga_laptop = ?, ram_laptop = ?, prosesor_laptop = ?, storage_laptop = ?, vga_laptop = ?, screen_laptop = ?, gambar_laptop = ?, model_laptop = ? WHERE id_laptop = ?");
-      $stmt->bind_param("issiiiiisssi", $kategori_laptop, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop, $id_laptop);
-      $stmt->execute();
-      $data_laptop = $stmt->affected_rows;
-      $stmt->close();
+       $harga = (float)preg_replace("/[^0-9]/", '', $harga_laptop);
+
+       $stmt = $db->prepare("UPDATE laptop SET kategori_id = ?, merk_laptop = ?, no_serial = ?, harga_laptop = ?, ram_laptop = ?, prosesor_laptop = ?, storage_laptop = ?, vga_laptop = ?, screen_laptop = ?, gambar_laptop = ?, model_laptop = ?, berat_laptop = ?, baterai_laptop = ?, is_touchscreen = ?, is_convertible = ?, has_backlit_kb = ?, has_biometric = ? WHERE id_laptop = ?");
+       $stmt->bind_param("issiiiiisssdiiiiii", $kategori_laptop, $merk_laptop, $no_serial, $harga, $ram_laptop, $prosesor_laptop, $storage_laptop, $vga_laptop, $screen_laptop, $uniq_name, $model_laptop, $berat_laptop, $baterai_laptop, $is_touchscreen, $is_convertible, $has_backlit_kb, $has_biometric, $id_laptop);
+       $stmt->execute();
+       $data_laptop = $stmt->affected_rows;
+       $stmt->close();
 
       if ($data_laptop >= 0) {
          echo "<script>
