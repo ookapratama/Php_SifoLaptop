@@ -95,7 +95,7 @@ include 'header.php';
                               <!--begin::Menu item-->
                               <div class="menu-item">
                                  <!--begin::Menu link-->
-                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="produk.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Produk</a>
+                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6 d-none" href="produk.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Produk</a>
                                  <!--end::Menu link-->
                               </div>
                               <!--end::Menu item-->
@@ -107,7 +107,7 @@ include 'header.php';
                      <!--end::Menu wrapper-->
                      <!--begin::Toolbar-->
                      <div class="flex-equal text-end ms-1">
-                        <a href="auth/login.php" class="btn btn-success">Sign In</a>
+                        <a href="auth/login.php" class="btn btn-success d-none">Sign In</a>
                      </div>
                      <!--end::Toolbar-->
                   </div>
@@ -1737,6 +1737,16 @@ include 'header.php';
                    }
                 }
              });
+          });
+
+          // Show a loading overlay while the browser navigates to produk.php with the wizard's answers
+          form.addEventListener("submit", function() {
+             new KTBlockUI(document.body, {
+                overlayClass: 'bg-white bg-opacity-75',
+                message: '<div class="d-flex flex-column align-items-center">'
+                       + '<span class="spinner-border spinner-border-lg text-success"></span>'
+                       + '<span class="mt-3 fw-bold text-gray-700">Mencari laptop terbaik untuk Anda...</span></div>'
+             }).block();
           });
        });
     </script>

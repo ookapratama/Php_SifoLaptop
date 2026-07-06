@@ -1,5 +1,6 @@
 <?php
 include 'controllers/admin/function.php';
+include 'controllers/produk/function.php';
 include 'header.php';
 
 
@@ -86,7 +87,7 @@ include 'header.php';
                               <!--begin::Menu item-->
                               <div class="menu-item">
                                  <!--begin::Menu link-->
-                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6" href="produk.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Produk</a>
+                                 <a class="menu-link nav-link py-3 px-4 px-xxl-6 d-none" href="produk.php" data-kt-scroll-toggle="true" data-kt-drawer-dismiss="true">Produk</a>
                                  <!--end::Menu link-->
                               </div>
                               <!--end::Menu item-->
@@ -98,7 +99,7 @@ include 'header.php';
                      <!--end::Menu wrapper-->
                      <!--begin::Toolbar-->
                      <div class="flex-equal text-end ms-1">
-                        <a href="auth/login.php" class="btn btn-success">Sign In</a>
+                        <a href="auth/login.php" class="btn btn-success d-none">Sign In</a>
                      </div>
                      <!--end::Toolbar-->
                   </div>
@@ -138,7 +139,9 @@ include 'header.php';
             <!--end::Heading-->
 
             <?php
-            $has_conflict = false;
+            $criteria = [];
+            $show_budget_advisory = false;
+
             if (isset($_GET['submit_search'])) {
                $kategori_laptop = isset($_GET['kategori_laptop']) ? mysqli_real_escape_string($db, $_GET['kategori_laptop']) : '';
                $merk = isset($_GET['merk_laptop']) ? mysqli_real_escape_string($db, $_GET['merk_laptop']) : '';
@@ -151,152 +154,75 @@ include 'header.php';
                $has_backlit_kb = isset($_GET['has_backlit_kb']) ? (int)$_GET['has_backlit_kb'] : 0;
                $has_biometric = isset($_GET['has_biometric']) ? (int)$_GET['has_biometric'] : 0;
 
-               $min_ram_bobot = 0;
-               $min_prosesor_bobot = 0;
-               $min_storage_bobot = 0;
-               $min_vga_bobot = 0;
+               $weights = buildWeights([
+                  'merk' => !empty($merk),
+                  'kategori' => !empty($kategori_laptop),
+                  'is_touchscreen' => $is_touchscreen == 1,
+                  'is_convertible' => $is_convertible == 1,
+                  'has_backlit_kb' => $has_backlit_kb == 1,
+                  'has_biometric' => $has_biometric == 1,
+               ]);
 
-               if ($tujuan == 'office_ringan') {
-                  $min_ram_bobot = 4;
-                  $min_prosesor_bobot = 1;
-                  $min_storage_bobot = 1;
-                  $min_vga_bobot = 1;
-               } elseif ($tujuan == 'bisnis') {
-                  $min_ram_bobot = 8;
-                  $min_prosesor_bobot = 3;
-                  $min_storage_bobot = 2;
-                  $min_vga_bobot = 1;
-               } elseif ($tujuan == 'editing') {
-                  $min_ram_bobot = 8;
-                  $min_prosesor_bobot = 5;
-                  $min_storage_bobot = 2;
-                  $min_vga_bobot = 3;
-               } elseif ($tujuan == 'gaming') {
-                  $min_ram_bobot = 16;
-                  $min_prosesor_bobot = 5;
-                  $min_storage_bobot = 2;
-                  $min_vga_bobot = 4;
+               $specWeights = getSpecWeights($tujuan);
+               $specScale = $weights['spec'] / 45;
+               foreach ($specWeights as $dim => $w) {
+                  $specWeights[$dim] = $w * $specScale;
                }
 
-               // Conflict resolution: Gaming/Editing on under 5M budget
-               if (($tujuan == 'editing' || $tujuan == 'gaming') && $budget_range == 'under_5') {
-                  $has_conflict = true;
-                  $budget_max_val = 10000000; // Relax budget limit to show options
-               } else {
-                  if ($budget_range == 'under_5') {
-                     $budget_max_val = 5000000;
-                  } elseif ($budget_range == '5_to_10') {
-                     $budget_max_val = 10000000;
-                  } elseif ($budget_range == '10_to_15') {
-                     $budget_max_val = 15000000;
-                  } else {
-                     $budget_max_val = 0; // Above 15 Juta has no upper limit
-                  }
-               }
+               $criteria = [
+                  'tujuan' => $tujuan,
+                  'mobilitas' => $mobilitas,
+                  'baterai' => $baterai,
+                  'budget_range' => $budget_range,
+                  'merk' => $merk,
+                  'kategori_laptop' => $kategori_laptop,
+                  'is_touchscreen' => $is_touchscreen,
+                  'is_convertible' => $is_convertible,
+                  'has_backlit_kb' => $has_backlit_kb,
+                  'has_biometric' => $has_biometric,
+                  'weights' => $weights,
+                  'spec_weights' => $specWeights,
+               ];
+            }
 
-               $query = "SELECT
-               laptop.*,
-               ram_feature.nama_fitur AS ram,
-               prosesor_feature.nama_fitur AS prosesor,
-               storage_feature.nama_fitur AS storage,
-               vga_feature.nama_fitur AS vga,
-               screen_feature.nama_fitur AS screen,
+            $produks = select("SELECT laptop.*,
+               ram_feature.nama_fitur AS ram, ram_feature.bobot AS ram_bobot,
+               prosesor_feature.nama_fitur AS prosesor, prosesor_feature.bobot AS prosesor_bobot,
+               storage_feature.nama_fitur AS storage, storage_feature.bobot AS storage_bobot,
+               vga_feature.nama_fitur AS vga, vga_feature.bobot AS vga_bobot,
+               screen_feature.nama_fitur AS screen, screen_feature.bobot AS screen_bobot,
                kategori_laptop.nama_kategori
-           FROM
-               laptop
-           JOIN
-               fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
-           JOIN
-               fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
-           JOIN
-               fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
-           JOIN
-               fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-           JOIN
-               fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
-           LEFT JOIN
-               kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori
-           WHERE 1 ";
+               FROM laptop
+               JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur
+               JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur
+               JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur
+               JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
+               JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur
+               LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
 
-               if (!empty($kategori_laptop)) {
-                  $query .= " AND kategori_laptop.nama_kategori LIKE '%$kategori_laptop%'";
-               }
+            $laptop_rows = [];
+            while ($row = mysqli_fetch_assoc($produks)) {
+               $laptop_rows[] = $row;
+            }
 
-               if (!empty($merk)) {
-                  $query .= " AND (merk_laptop LIKE '%$merk%' OR model_laptop LIKE '%$merk%')";
+            if (isset($_GET['submit_search'])) {
+               $maxBobot = getMaxBobotPerJenis($db);
+               foreach ($laptop_rows as &$row) {
+                  $result = calculateMatchScore($row, $criteria, $maxBobot);
+                  $row['_match_score'] = $result['total_score'];
+                  $row['_breakdown'] = $result['breakdown'];
+                  $row['_reasons_str'] = implode('||', buildReasons($row, $criteria, $result['breakdown'], $result['total_score']));
                }
+               unset($row);
 
-               if ($budget_max_val > 0) {
-                  $query .= " AND harga_laptop <= $budget_max_val";
-               }
-
-               if ($min_ram_bobot > 0) {
-                  $query .= " AND ram_feature.bobot >= $min_ram_bobot";
-               }
-
-               if ($min_prosesor_bobot > 0) {
-                  $query .= " AND prosesor_feature.bobot >= $min_prosesor_bobot";
-               }
-
-               if ($min_storage_bobot > 0) {
-                  $query .= " AND storage_feature.bobot >= $min_storage_bobot";
-               }
-
-               if ($min_vga_bobot > 0) {
-                  $query .= " AND vga_feature.bobot >= $min_vga_bobot";
-               }
-
-               // Filter Mobilitas (Layar & Berat)
-               if ($mobilitas == 'sangat_sering') {
-                  $query .= " AND screen_feature.bobot <= 13 AND berat_laptop <= 1.4";
-               } elseif ($mobilitas == 'kadang') {
-                  $query .= " AND screen_feature.bobot BETWEEN 14 AND 15 AND berat_laptop <= 1.9";
-               } elseif ($mobilitas == 'jarang') {
-                  $query .= " AND screen_feature.bobot >= 15";
-               }
-
-               // Filter Baterai
-               if ($baterai == 'terbatas') {
-                  $query .= " AND baterai_laptop >= 55";
-               }
-
-               // Filter Fitur Tambahan
-               if ($is_touchscreen) {
-                  $query .= " AND is_touchscreen = 1";
-               }
-               if ($is_convertible) {
-                  $query .= " AND is_convertible = 1";
-               }
-               if ($has_backlit_kb) {
-                  $query .= " AND has_backlit_kb = 1";
-               }
-               if ($has_biometric) {
-                  $query .= " AND has_biometric = 1";
-               }
-
-               $query .= " LIMIT 4";
-
-               $produks = select($query);
-            } else {
-               $produks = select("SELECT laptop.*, 
-                  ram_feature.nama_fitur AS ram,
-                  prosesor_feature.nama_fitur AS prosesor,
-                  storage_feature.nama_fitur AS storage,
-                  vga_feature.nama_fitur AS vga,
-                  screen_feature.nama_fitur AS screen,
-                  kategori_laptop.nama_kategori
-                  FROM laptop
-                  JOIN fitur_laptop AS ram_feature ON laptop.ram_laptop = ram_feature.id_fitur 
-                  JOIN fitur_laptop AS prosesor_feature ON laptop.prosesor_laptop = prosesor_feature.id_fitur 
-                  JOIN fitur_laptop AS storage_feature ON laptop.storage_laptop = storage_feature.id_fitur 
-                  JOIN fitur_laptop AS vga_feature ON laptop.vga_laptop = vga_feature.id_fitur
-                  JOIN fitur_laptop AS screen_feature ON laptop.screen_laptop = screen_feature.id_fitur 
-                  LEFT JOIN kategori_laptop ON laptop.kategori_id = kategori_laptop.id_kategori");
+               usort($laptop_rows, fn($a, $b) => $b['_match_score'] <=> $a['_match_score']);
+               $laptop_rows = array_slice($laptop_rows, 0, 4);
+               $show_budget_advisory = !empty($laptop_rows) && $laptop_rows[0]['_breakdown']['budget']['score'] < 0.7;
             }
             ?>
 
-            <!--begin::Conflict Alert-->
-            <?php if ($has_conflict) : ?>
+            <!--begin::Budget Advisory-->
+            <?php if ($show_budget_advisory) : ?>
                <div class="alert alert-dismissible bg-light-warning d-flex flex-column flex-sm-row p-5 mb-10 border border-warning border-dashed rounded">
                   <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -307,7 +233,7 @@ include 'header.php';
                   </span>
                   <div class="d-flex flex-column pe-0 pe-sm-10">
                      <h5 class="mb-1 text-dark fw-bold">Anggaran Kurang Memadai</h5>
-                     <span>Anda memilih kebutuhan <strong>Kerja Berat/Gaming</strong> dengan budget <strong>Di bawah Rp 5 Juta</strong>. Kebutuhan ini biasanya memerlukan spesifikasi tinggi yang harganya di atas Rp 10 Juta. Kami menampilkan laptop terdekat yang mungkin cocok dengan sedikit melonggarkan batas budget Anda.</span>
+                     <span>Berdasarkan kebutuhan yang Anda pilih, laptop dengan kecocokan terbaik berada sedikit di atas anggaran ideal Anda. Kami tetap menampilkan pilihan terdekat yang paling relevan dengan kebutuhan Anda.</span>
                   </div>
                   <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
                      <span class="svg-icon svg-icon-1 svg-icon-warning">
@@ -324,117 +250,54 @@ include 'header.php';
             <div class="row g-lg-10 mb-10 mb-lg-20">
 
                <?php
-               if (mysqli_num_rows($produks) != 0) {
-                  while ($produk = mysqli_fetch_assoc($produks)) :
-                     // var_dump($produk);
-                     $reasons_str = "";
-                     if (isset($_GET['submit_search'])) {
-                        $reasons = [];
-                        
-                        // 1. Use Case Reason
-                        if ($tujuan == 'office_ringan') {
-                           $reasons[] = "Cocok untuk Tugas Harian Standar (Browsing/Zoom/Office) dengan prosesor hemat daya dan performa memadai.";
-                        } elseif ($tujuan == 'bisnis') {
-                           $reasons[] = "Sangat baik untuk Produktivitas Kerja & Desain Ringan berkat kombinasi CPU mid-tier dan RAM yang mumpuni.";
-                        } elseif ($tujuan == 'editing') {
-                           $reasons[] = "Direkomendasikan untuk Editing Video & Rendering karena dilengkapi CPU kelas atas dan RAM/GPU performa tinggi.";
-                        } elseif ($tujuan == 'gaming') {
-                           $reasons[] = "Sangat direkomendasikan untuk Gaming Intensif dengan spesifikasi CPU performa tinggi dan GPU Dedicated tangguh.";
-                        }
-
-                        // 2. Mobility Reason
-                        if ($mobilitas == 'sangat_sering') {
-                           $reasons[] = "Memiliki mobilitas tinggi karena sangat ringan (" . $produk['berat_laptop'] . " kg) dan layar ringkas (" . $produk['screen'] . ").";
-                        } elseif ($mobilitas == 'kadang') {
-                           $reasons[] = "Bobot seimbang (" . $produk['berat_laptop'] . " kg) dengan layar " . $produk['screen'] . ", pas untuk penggunaan fleksibel.";
-                        } elseif ($mobilitas == 'jarang') {
-                           $reasons[] = "Ukuran layar besar (" . $produk['screen'] . ") memberikan kenyamanan optimal saat bekerja di meja.";
-                        }
-
-                        // 3. Battery Reason
-                        if ($baterai == 'terbatas' && $produk['baterai_laptop'] >= 55) {
-                           $reasons[] = "Kapasitas baterai besar (" . $produk['baterai_laptop'] . " WHr) mendukung daya tahan lama untuk penggunaan outdoor.";
-                        } elseif ($produk['baterai_laptop']) {
-                           $reasons[] = "Kapasitas baterai " . $produk['baterai_laptop'] . " WHr mencukupi untuk produktivitas harian Anda.";
-                        }
-
-                        // 4. Budget Reason
-                        $harga_formatted = number_format($produk['harga_laptop'], 0, ',', '.');
-                        if ($budget_range == 'under_5' && $produk['harga_laptop'] <= 5000000) {
-                           $reasons[] = "Sesuai dengan anggaran hemat Anda di bawah Rp 5 Juta (Harga: Rp " . $harga_formatted . ").";
-                        } elseif ($budget_range == '5_to_10' && $produk['harga_laptop'] <= 10000000) {
-                           $reasons[] = "Sesuai dengan anggaran Rp 5 - 10 Juta pilihan Anda (Harga: Rp " . $harga_formatted . ").";
-                        } elseif ($budget_range == '10_to_15' && $produk['harga_laptop'] <= 15000000) {
-                           $reasons[] = "Sesuai dengan anggaran Rp 10 - 15 Juta pilihan Anda (Harga: Rp " . $harga_formatted . ").";
-                        } elseif ($budget_range == 'above_15' && $produk['harga_laptop'] > 15000000) {
-                           $reasons[] = "Sesuai dengan anggaran premium di atas Rp 15 Juta (Harga: Rp " . $harga_formatted . ").";
-                        } elseif ($has_conflict) {
-                           $reasons[] = "Meskipun melebihi budget < Rp 5 Juta, laptop ini (Rp " . $harga_formatted . ") adalah pilihan terdekat untuk kebutuhan performa tinggi Anda.";
-                        }
-
-                        // 5. Special Features Matched
-                        if ($is_touchscreen && $produk['is_touchscreen']) {
-                           $reasons[] = "Menyediakan fitur Layar Sentuh (Touchscreen) sesuai keinginan Anda.";
-                        }
-                        if ($is_convertible && $produk['is_convertible']) {
-                           $reasons[] = "Memiliki desain fleksibel 2-in-1 yang bisa dilipat menjadi tablet.";
-                        }
-                        if ($has_backlit_kb && $produk['has_backlit_kb']) {
-                           $reasons[] = "Dilengkapi Keyboard Backlit untuk kenyamanan mengetik di kondisi minim cahaya.";
-                        }
-                        if ($has_biometric && $produk['has_biometric']) {
-                           $reasons[] = "Sistem keamanan biometrik (Fingerprint/Face Unlock) aktif untuk proteksi ekstra.";
-                        }
-
-                        $reasons_str = implode('||', $reasons);
-                     }
+               if (count($laptop_rows) != 0) {
+                  foreach ($laptop_rows as $produk) :
+                     $reasons_str = $produk['_reasons_str'] ?? '';
+                     $match_score = $produk['_match_score'] ?? null;
+                     $card_data = [
+                        'merk_laptop' => $produk['merk_laptop'],
+                        'model_laptop' => $produk['model_laptop'],
+                        'gambar_laptop' => $produk['gambar_laptop'],
+                        'nama_kategori' => $produk['nama_kategori'],
+                        'no_serial' => $produk['no_serial'],
+                        'prosesor' => $produk['prosesor'],
+                        'ram' => $produk['ram'],
+                        'storage' => $produk['storage'],
+                        'vga' => $produk['vga'],
+                        'screen' => $produk['screen'],
+                        'harga_laptop' => $produk['harga_laptop'],
+                        'reasons' => $reasons_str,
+                        'match_score' => $match_score,
+                        'breakdown' => $produk['_breakdown'] ?? null,
+                     ];
                ?>
                      <!--begin::Col-->
-                     <div class="col-lg-4">
-                        <!--begin::Testimonial-->
-                        <!--begin::Modal - New Card-->
-                        <div class="bg-primary border shadow-lg rounded" style="width: 22rem;">
-                           <!--begin::Modal dialog-->
-                           <div class="modal-dialog modal-dialog-centered mw-650px">
-                              <!--begin::Modal content-->
-                              <div class="modal-content">
-                                 <!--begin::Modal header-->
-                                 <div class="modal-header m-3 py-5 px-3">
-                                    <!--begin::Modal title-->
-                                    <h2><?= $produk['merk_laptop'] ?> - <?= $produk['model_laptop'] ?> <br> <?= $produk['nama_kategori'] ?></h2>
-                                    <!--end::Modal title-->
-
-                                 </div>
-                                 <!--end::Modal header-->
-                                 <!--begin::Modal body-->
-                                 <div class="modal-body scroll-y mx-5 my-3    ">
-
-                                    <img src="admin/img/<?= $produk['gambar_laptop'] ?>" style="width: 15rem;" class="card-img-top d-flex justify-content-center mx-auto" alt="...">
-                                    <div class="text-left my-3">
-                                       <span class="text-muted d-block">Processor : <?= $produk['prosesor'] ?></span>
-                                       <span class="text-muted d-block">Ram : <?= $produk['ram'] ?> </span>
-                                       <span class="text-muted d-block">Storage : <?= $produk['storage'] ?></span>
-                                       <span class="text-muted d-block">VGA Card : <?= $produk['vga'] ?></span>
-                                       <span class="text-muted d-block">Size Screen : <?= $produk['screen'] ?></span>
-                                    </div>
-                                    <div class="text-center">
-                                       <h3>Rp. <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h3>
-                                    </div>
-                                 </div>
-                                 <!--end::Modal body-->
-                                 <div class="d-grid gap-2">
-                                    <a class="btn btn-primary" onclick="dataId('<?= $produk['merk_laptop'] ?>', '<?= $produk['model_laptop'] ?>', '<?= $produk['gambar_laptop'] ?>', '<?= $produk['nama_kategori'] ?>', '<?= $produk['no_serial'] ?>', '<?= $produk['prosesor'] ?>', '<?= $produk['ram'] ?>', '<?= $produk['storage'] ?>', '<?= $produk['vga'] ?>', '<?= $produk['screen'] ?>', '<?= $produk['harga_laptop'] ?>', '<?= htmlspecialchars(addslashes($reasons_str), ENT_QUOTES, 'UTF-8') ?>')" type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_new_card" href="javascript:void(0)">More Info</a>
-                                 </div>
+                     <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+                        <!--begin::Product card-->
+                        <div class="card h-100 shadow-sm border-0 position-relative">
+                           <?php if ($match_score !== null) : ?>
+                              <span class="badge bg-success position-absolute top-0 end-0 m-3 fs-6"><?= round($match_score) ?>% Match</span>
+                           <?php endif; ?>
+                           <img src="admin/img/<?= htmlspecialchars($produk['gambar_laptop']) ?>"
+                              onerror="this.onerror=null;this.src='assets/media/svg/files/blank-image.svg';"
+                              class="card-img-top object-fit-contain p-4" style="height: 200px;"
+                              alt="<?= htmlspecialchars($produk['merk_laptop'] . ' ' . $produk['model_laptop']) ?>">
+                           <div class="card-body d-flex flex-column">
+                              <h5 class="card-title"><?= htmlspecialchars($produk['merk_laptop']) ?> - <?= htmlspecialchars($produk['model_laptop']) ?></h5>
+                              <p class="text-muted small mb-2"><?= htmlspecialchars($produk['nama_kategori']) ?></p>
+                              <div class="mt-auto">
+                                 <h5 class="mb-3">Rp <?= number_format($produk['harga_laptop'], 0, ',', '.') ?></h5>
+                                 <button class="btn btn-primary w-100" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#kt_modal_new_card"
+                                    data-produk="<?= htmlspecialchars(json_encode($card_data), ENT_QUOTES, 'UTF-8') ?>"
+                                    onclick="dataId(this)">More Info</button>
                               </div>
-                              <!--end::Modal content-->
                            </div>
-                           <!--end::Modal dialog-->
                         </div>
-                        <!--end::Modal - New Card-->
-                        <!--end::Testimonial-->
+                        <!--end::Product card-->
                      </div>
                      <!--end::Col-->
-                  <?php endwhile; ?>
+                  <?php endforeach; ?>
                <?php } else {
                ?>
                   <h2 class="text-center">Data Tidak ada</h2>
@@ -1332,6 +1195,7 @@ include 'header.php';
 
                   <h1 id="merk_laptop"></h1>
                   <h2 id="nama_kategori"></h2>
+                  <span id="modal_match_score" class="badge bg-success fs-6 mt-1" style="display: none;"></span>
                </div>
 
                <!-- <h2>Add New Card <span id="id_laptop"></span></h2> -->
@@ -1352,39 +1216,13 @@ include 'header.php';
             <!--end::Modal header-->
             <!--begin::Modal body-->
             <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
-               <!--  -->
-               <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                  <div class="carousel-inner">
-                     <div class="carousel-item active ">
-                        <img src="" class="d-block w-50 mx-auto modal-image" alt="">
-                     </div>
+               <img src="" class="d-block w-50 mx-auto modal-image" alt="">
 
-                  </div>
-
-
-               </div>
-
-
-
-
-               <div class="row mt-5 text-center">
-                  <div class="col-md-6">
-                     <!-- <h4 id="prosesor"></h4> -->
-                  </div>
-                  <div class="col-md-6">
-                     <!-- <h4 id="ram"></h4> -->
-                  </div>
-               </div>
-               <div class="row text-center my-3">
-                  <div class="col-md-6">
-                     <!-- <h4 id="vga"></h4> -->
-                  </div>
-                  <div class="col-md-6">
-                     <!-- <h4 id="screen"></h4> -->
-                  </div>
-               </div>
                <h3 class="my-5 text-center" id="harga_laptop"></h3>
-               
+
+               <!-- Skor Kecocokan Section -->
+               <div id="skor_breakdown" class="mb-5"></div>
+
                <!-- Alasan Rekomendasi Section -->
                <div class="alert alert-dismissible bg-light-success d-flex flex-column p-5 mb-5 border border-success border-dashed rounded" id="rekomendasi_section" style="display: none;">
                   <div class="d-flex align-items-center mb-2">
@@ -1402,50 +1240,42 @@ include 'header.php';
                </div>
             </div>
             <!--end::Modal body-->
-            <table class="fs-6 table table-hover table-bordered text-center">
-               <tbody>
-                  <tr>
-                     <td>Processor</td>
-                     <td class="">
-                        <span id="prosesor">
-                           Pending
-                        </span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Memory </td>
-                     <td>
-                        <span id="ram">
-                           Pending
-                        </span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Storage </td>
-                     <td>
-                        <span id="storage">
-                           Pending
-                        </span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>VGA Card </td>
-                     <td>
-                        <span id="vga">
-                           Pending
-                        </span>
-                     </td>
-                  </tr>
-                  <tr>
-                     <td>Screen Size </td>
-                     <td>
-                        <span id="screen">
-                           Pending
-                        </span>
-                     </td>
-                  </tr>
-               </tbody>
-            </table>
+            <div class="table-responsive">
+               <table class="fs-6 table table-hover table-bordered text-center">
+                  <tbody>
+                     <tr>
+                        <td>Processor</td>
+                        <td class="">
+                           <span id="prosesor"></span>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Memory </td>
+                        <td>
+                           <span id="ram"></span>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Storage </td>
+                        <td>
+                           <span id="storage"></span>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>VGA Card </td>
+                        <td>
+                           <span id="vga"></span>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Screen Size </td>
+                        <td>
+                           <span id="screen"></span>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
          </div>
          <!--end::Modal content-->
       </div>
@@ -1453,34 +1283,67 @@ include 'header.php';
    </div>
 
    <script>
-      function dataId(merk_laptop, model_laptop, gambar_laptop, nama_kategori, no_serial, prosesor, ram, storage, vga, screen, harga_laptop, reasons = '') {
-         console.log(gambar_laptop);
-         document.querySelector('#merk_laptop').innerHTML = merk_laptop + " - " + model_laptop;
-         document.querySelector('#nama_kategori').innerHTML = nama_kategori + " Serial " + no_serial;
-         document.querySelector('#prosesor').innerHTML = prosesor;
-         document.querySelector('#ram').innerHTML = ram;
-         document.querySelector('#storage').innerHTML = storage;
-         document.querySelector('#vga').innerHTML = vga;
-         document.querySelector('#screen').innerHTML = screen;
+      const KBF_BREAKDOWN_LABELS = {
+         spec: 'Spesifikasi', budget: 'Budget', mobilitas: 'Mobilitas', baterai: 'Baterai',
+         merk: 'Merk', kategori: 'Kategori', is_touchscreen: 'Touchscreen',
+         is_convertible: 'Convertible', has_backlit_kb: 'Backlit Keyboard', has_biometric: 'Biometrik'
+      };
+
+      function dataId(button) {
+         const data = JSON.parse(button.dataset.produk);
+
+         document.querySelector('#merk_laptop').innerHTML = data.merk_laptop + " - " + data.model_laptop;
+         document.querySelector('#nama_kategori').innerHTML = data.nama_kategori + " Serial " + data.no_serial;
+         document.querySelector('#prosesor').innerHTML = data.prosesor;
+         document.querySelector('#ram').innerHTML = data.ram;
+         document.querySelector('#storage').innerHTML = data.storage;
+         document.querySelector('#vga').innerHTML = data.vga;
+         document.querySelector('#screen').innerHTML = data.screen;
 
          const formatter = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR'
          });
+         document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatter.format(data.harga_laptop);
 
-         const formatAngka = formatter.format(harga_laptop);
-         console.log(formatAngka);
-         document.querySelector('#harga_laptop').innerHTML = "Harga : " + formatAngka;
-         const gambar_laptop1 = document.querySelector('.modal-image');
-         gambar_laptop1.src = 'admin/img/' + gambar_laptop;
+         const gambarLaptop = document.querySelector('.modal-image');
+         gambarLaptop.onerror = function() {
+            this.onerror = null;
+            this.src = 'assets/media/svg/files/blank-image.svg';
+         };
+         gambarLaptop.src = 'admin/img/' + data.gambar_laptop;
 
-         // Handle recommendation reasons dynamically
+         const scoreBadge = document.querySelector('#modal_match_score');
+         if (scoreBadge) {
+            if (data.match_score !== null && data.match_score !== undefined) {
+               scoreBadge.style.display = '';
+               scoreBadge.textContent = Math.round(data.match_score) + '% Match';
+            } else {
+               scoreBadge.style.display = 'none';
+               scoreBadge.textContent = '';
+            }
+         }
+
+         const breakdownEl = document.querySelector('#skor_breakdown');
+         if (breakdownEl) {
+            breakdownEl.innerHTML = '';
+            if (data.breakdown) {
+               breakdownEl.innerHTML = Object.keys(data.breakdown).map(function(key) {
+                  const item = data.breakdown[key];
+                  const label = KBF_BREAKDOWN_LABELS[key] || key;
+                  const pct = Math.round(item.score * 100);
+                  return '<div class="d-flex justify-content-between fs-7 text-gray-700">'
+                       + '<span>' + label + '</span><span>' + pct + '%</span></div>';
+               }).join('');
+            }
+         }
+
          const recSection = document.querySelector('#rekomendasi_section');
          const recReasons = document.querySelector('#rekomendasi_reasons');
          if (recSection && recReasons) {
-            if (reasons && reasons.trim() !== '') {
+            if (data.reasons && data.reasons.trim() !== '') {
                recSection.style.setProperty('display', 'flex', 'important');
-               const reasonList = reasons.split('||');
+               const reasonList = data.reasons.split('||');
                recReasons.innerHTML = '';
                reasonList.forEach(reason => {
                   if (reason.trim() !== '') {
