@@ -141,6 +141,7 @@ include 'header.php';
             <?php
             $criteria = [];
             $show_budget_advisory = false;
+            $show_no_exact_match = false;
 
             if (isset($_GET['submit_search'])) {
                $kategori_laptop = isset($_GET['kategori_laptop']) ? mysqli_real_escape_string($db, $_GET['kategori_laptop']) : '';
@@ -215,8 +216,25 @@ include 'header.php';
                }
                unset($row);
 
-               usort($laptop_rows, fn($a, $b) => $b['_match_score'] <=> $a['_match_score']);
-               $laptop_rows = array_slice($laptop_rows, 0, 4);
+               $eligible_rows = array_filter($laptop_rows, function ($row) use ($criteria) {
+                  $breakdown = $row['_breakdown'];
+                  if (!empty($criteria['merk']) && empty($breakdown['merk']['matched'])) {
+                     return false;
+                  }
+                  if (!empty($criteria['kategori_laptop']) && empty($breakdown['kategori']['matched'])) {
+                     return false;
+                  }
+                  if (!empty($criteria['budget_range']) && empty($breakdown['budget']['matched'])) {
+                     return false;
+                  }
+                  return true;
+               });
+
+               $show_no_exact_match = empty($eligible_rows);
+               $ranked_rows = $show_no_exact_match ? $laptop_rows : $eligible_rows;
+
+               usort($ranked_rows, fn($a, $b) => $b['_match_score'] <=> $a['_match_score']);
+               $laptop_rows = array_slice($ranked_rows, 0, 4);
                $show_budget_advisory = !empty($laptop_rows) && $laptop_rows[0]['_breakdown']['budget']['score'] < 0.7;
             }
             ?>
@@ -237,6 +255,31 @@ include 'header.php';
                   </div>
                   <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
                      <span class="svg-icon svg-icon-1 svg-icon-warning">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"/>
+                           <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"/>
+                        </svg>
+                     </span>
+                  </button>
+               </div>
+            <?php endif; ?>
+
+            <!--begin::No Exact Match Advisory-->
+            <?php if ($show_no_exact_match) : ?>
+               <div class="alert alert-dismissible bg-light-info d-flex flex-column flex-sm-row p-5 mb-10 border border-info border-dashed rounded">
+                  <span class="svg-icon svg-icon-2hx svg-icon-info me-4 mb-5 mb-sm-0">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor"/>
+                        <rect x="11" y="14" width="2" height="2" rx="1" fill="currentColor"/>
+                        <rect x="11" y="7" width="2" height="5" rx="1" fill="currentColor"/>
+                     </svg>
+                  </span>
+                  <div class="d-flex flex-column pe-0 pe-sm-10">
+                     <h5 class="mb-1 text-dark fw-bold">Tidak Ada Kecocokan Persis</h5>
+                     <span>Tidak ada laptop yang memenuhi semua kriteria (merk/kategori/anggaran) yang Anda pilih. Kami tetap menampilkan laptop dengan skor kecocokan terbaik sebagai alternatif terdekat.</span>
+                  </div>
+                  <button type="button" class="position-absolute position-sm-relative m-2 m-sm-0 top-0 end-0 btn btn-icon ms-sm-auto" data-bs-dismiss="alert">
+                     <span class="svg-icon svg-icon-1 svg-icon-info">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"/>
                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"/>
